@@ -1,3 +1,16 @@
+# 把 blog 跑起来
+
+安装：brew install mongodb
+启动：brew services start mongodb
+验证: mongo --host 127.0.0.1:27017
+
+npm i 
+node index.js
+view localhost:3000
+
+OK
+
+不太熟悉mongodb，因此安装一个图形客户端，帮助学习 。Robo 3T 之前就是rebomongo
 ## N-blog
 
 使用 Express + MongoDB 搭建多人博客
