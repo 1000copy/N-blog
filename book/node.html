@@ -1,0 +1,2410 @@
+<h2 id="安装-node.js">安装 Node.js</h2>
+<p>在 Mac 下可以通过 <a href="http://brew.sh/">Homebrew</a> 安装。这个是非常方便的方式。</p>
+<h2 id="nvm">nvm</h2>
+<p>nvm 可以安装多个nodejs版本，并在这些版本内切换。</p>
+<h2 id="nrm">nrm</h2>
+<p><a href="https://github.com/Pana/nrm">nrm</a> 是一个管理 npm 源的工具。用来切换官方 npm 源和国内的 npm 源（如: <a href="http://cnpmjs.org/">cnpm</a>），当然也可以用来切换官方 npm 源和公司私有 npm 源。</p>
+<p>全局安装 nrm:</p>
+<pre><code>npm i nrm -g</code></pre>
+<p>查看当前 nrm 内置的几个 npm 源的地址：</p>
+<pre><code>$ nrm ls
+
+  npm ---- https://registry.npmjs.org/
+  cnpm --- http://r.cnpmjs.org/
+* taobao - https://registry.npm.taobao.org/
+  nj ----- https://registry.nodejitsu.com/
+  rednpm - http://registry.mirror.cqupt.edu.cn/
+  npmMirror  https://skimdb.npmjs.com/registry/
+  edunpm - http://registry.enpmjs.org/</code></pre>
+<p>打头的<code>*</code>标识当前源地址。这里是taobao。</p>
+<p>使用use命令可以切换npm源:</p>
+<pre><code>$ nrm use taobao
+Registry has been set to: https://registry.npm.taobao.org/</code></pre>
+<h2 id="mongodb-命令">mongodb 命令</h2>
+<pre><code>show dbs    列表全部数据库
+use &lt;db&gt;    切换当前数据库
+show collections    显示当前数据库的集合
+db.collection.find() 在指定集合内查找，比如db.comments.find({name:&quot;rita&quot;})
+db.collection.insertOne() 在指定集合内插入，比如db.men.insertOne({name:&quot;rita&quot;})
+db.collection.updateOne() 在指定集合内更新</code></pre>
+<h2 id="robo-3t">Robo 3T</h2>
+<p>对于不熟悉mongodb的人，有一个GUI的客户端，可以显著降低学习曲线。Robo 3T的前身就是<a href="https://robomongo.org/">Robomongo</a> 是一个基于 Shell 的跨平台开源 MongoDB 可视化管理工具，支持 Windows、Linux 和 Mac。 <a href="https://robomongo.org/download">下载地址</a></p>
+<p>下载并安装成功后点击左上角的 <code>Create</code> 创建一个连接，给该连接起个名字如: <code>localhost</code>，使用默认地址（localhost）和端口（27017）即可，点击 <code>Save</code> 保存。 环境变量不属于 Node.js 的知识范畴，只不过我们在开发 Node.js 应用时经常与环境变量打交道，所以这里简单介绍下。</p>
+<p>环境变量（environment variables）一般是指在操作系统中用来指定操作系统运行环境的一些参数。在 Mac 和 Linux 的终端直接输入 env，会列出当前的环境变量，如：USER=xxx。简单来讲，环境变量就是传递参数给运行程序的。</p>
+<p>在 Node.js 中，我们经常这么用:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ot">NODE_ENV=</span>test <span class="kw">node</span> app</code></pre></div>
+<p>通过以上命令启动程序，指定当前环境变量 <code>NODE_ENV</code> 的值为 test，那么在 app.js 中可通过 <code>process.env</code> 来获取环境变量:</p>
+<pre><code>console.log(process.env.NODE_ENV) //test</code></pre>
+<p>另一个常见的例子是使用 <a href="https://www.npmjs.com/package/debug">debug</a> 模块时:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ot">DEBUG=</span><span class="kw">*</span> node app</code></pre></div>
+<p>Windows 用户需要首先设置环境变量，然后再执行程序：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">set</span> <span class="ot">DEBUG=</span><span class="kw">*</span>
+<span class="kw">set</span> <span class="ot">NODE_ENV=</span>test
+<span class="kw">node</span> app</code></pre></div>
+<p>或者使用 <a href="https://www.npmjs.com/package/cross-env">cross-env</a>：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i cross-env -g</code></pre></div>
+<p>使用方式：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">cross-env</span> NODE_ENV=test node app</code></pre></div>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/2.3%20Promise.md">2.3 Promise</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/2.5%20package.json.md">2.5 packge.json</a> 首先，我们新建一个目录 myblog，在该目录下运行 <code>npm init</code> 生成一个 package.json，如下所示：</p>
+<div class="figure">
+<img src="./img/3.1.1.png" />
+
+</div>
+<blockquote>
+<p>注意：括号里的是默认值，如果使用默认值则直接回车即可，否则输入自定义内容后回车。</p>
+</blockquote>
+<p>然后安装 express 并写入 package.json：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i express@4.14.0 --save </code></pre></div>
+<p>新建 index.js，添加如下代码：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+
+<span class="va">app</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;hello, express&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">listen</span>(<span class="dv">3000</span>)</code></pre></div>
+<p>以上代码的意思是：生成一个 express 实例 app，挂载了一个根路由控制器，然后监听 3000 端口并启动程序。运行 <code>node index</code>，打开浏览器访问 <code>localhost:3000</code> 时，页面应显示 hello, express。</p>
+<p>这是最简单的一个使用 express 的例子，后面会介绍路由及模板的使用。</p>
+<h2 id="supervisor">3.1.1 supervisor</h2>
+<p>在开发过程中，每次修改代码保存后，我们都需要手动重启程序，才能查看改动的效果。使用 <a href="https://www.npmjs.com/package/supervisor">supervisor</a> 可以解决这个繁琐的问题，全局安装 supervisor：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i -g supervisor</code></pre></div>
+<p>运行 <code>supervisor index</code> 启动程序，如下所示：</p>
+<div class="figure">
+<img src="./img/3.1.2.png" />
+
+</div>
+<p>supervisor 会监听当前目录下 node 和 js 后缀的文件，当这些文件发生改动时，supervisor 会自动重启程序。</p>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/2.6%20npm%20%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9.md">2.6 npm 使用注意事项</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/3.2%20%E8%B7%AF%E7%94%B1.md">3.2 路由</a> 前面我们只是挂载了根路径的路由控制器，现在修改 index.js 如下：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+
+<span class="va">app</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;hello, express&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">get</span>(<span class="st">&#39;/users/:name&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;hello, &#39;</span> <span class="op">+</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">name</span>)
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">listen</span>(<span class="dv">3000</span>)</code></pre></div>
+<p>以上代码的意思是：当访问根路径时，依然返回 hello, express，当访问如 <code>localhost:3000/users/nswbmw</code> 路径时，返回 hello, nswbmw。路径中 <code>:name</code> 起了占位符的作用，这个占位符的名字是 name，可以通过 <code>req.params.name</code> 取到实际的值。</p>
+<blockquote>
+<p>小提示：express 使用了 <a href="https://www.npmjs.com/package/path-to-regexp">path-to-regexp</a> 模块实现的路由匹配。</p>
+</blockquote>
+<p>不难看出：req 包含了请求来的相关信息，res 则用来返回该请求的响应。</p>
+<h2 id="express.router">3.2.1 express.Router</h2>
+<p>上面只是将所有路由控制函数都放到了 index.js，但在实际开发中通常有几十甚至上百的路由，都写在 index.js 既臃肿又不好维护。可以使用 express.Router 实现更优雅的路由解决方案。在 myblog 目录下创建空文件夹 routes，在 routes 目录下创建 index.js 和 users.js。最后代码如下：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+<span class="kw">const</span> indexRouter <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./routes/index&#39;</span>)
+<span class="kw">const</span> userRouter <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./routes/users&#39;</span>)
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> indexRouter)
+<span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/users&#39;</span><span class="op">,</span> userRouter)
+
+<span class="va">app</span>.<span class="at">listen</span>(<span class="dv">3000</span>)</code></pre></div>
+<p><strong>routes/index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;hello, express&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p><strong>routes/users.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:name&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;hello, &#39;</span> <span class="op">+</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">name</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p>以上代码的意思是：我们将 <code>/</code> 和 <code>/users/:name</code> 的路由分别放到了 routes/index.js 和 routes/users.js 中，每个路由文件通过生成一个 express.Router 实例 router 并导出，通过 <code>app.use</code> 挂载到不同的路径。这两种代码实现了相同的功能，但在实际开发中推荐使用 express.Router 将不同的路由分离到不同的路由文件中。</p>
+<p>更多 express.Router 的用法见 <a href="http://expressjs.com/en/4x/api.html#router">express 官方文档</a>。</p>
+<p>模板引擎（Template Engine）是一个将页面模板和数据结合起来生成 html 的工具。上例中，我们只是返回纯文本给浏览器，现在我们修改代码返回一个 html 页面给浏览器。</p>
+<h2 id="ejs">3.3.1 ejs</h2>
+<p>模板引擎有很多，<a href="https://www.npmjs.com/package/ejs">ejs</a> 是其中一种，因为它使用起来十分简单，而且与 express 集成良好，所以我们使用 ejs。安装 ejs：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i ejs --save</code></pre></div>
+<p>修改 index.js 如下：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> path <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;path&#39;</span>)
+<span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+<span class="kw">const</span> indexRouter <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./routes/index&#39;</span>)
+<span class="kw">const</span> userRouter <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./routes/users&#39;</span>)
+
+<span class="va">app</span>.<span class="at">set</span>(<span class="st">&#39;views&#39;</span><span class="op">,</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;views&#39;</span>))<span class="co">// 设置存放模板文件的目录</span>
+<span class="va">app</span>.<span class="at">set</span>(<span class="st">&#39;view engine&#39;</span><span class="op">,</span> <span class="st">&#39;ejs&#39;</span>)<span class="co">// 设置模板引擎为 ejs</span>
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> indexRouter)
+<span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/users&#39;</span><span class="op">,</span> userRouter)
+
+<span class="va">app</span>.<span class="at">listen</span>(<span class="dv">3000</span>)</code></pre></div>
+<p>通过 <code>app.set</code> 设置模板引擎为 ejs 和存放模板的目录。在 myblog 下新建 views 文件夹，在 views 下新建 users.ejs，添加如下代码：</p>
+<p><strong>views/users.ejs</strong></p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">    <span class="kw">&lt;h1&gt;</span><span class="er">&lt;</span>%= name.toUpperCase() %&gt;<span class="kw">&lt;/h1&gt;</span>
+    <span class="kw">&lt;p&gt;</span>hello, <span class="er">&lt;</span>%= name %&gt;<span class="kw">&lt;/p&gt;</span></code></pre></div>
+<p>修改 routes/users.js 如下：</p>
+<p><strong>routes/users.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:name&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;users&#39;</span><span class="op">,</span> <span class="op">{</span>
+    <span class="dt">name</span><span class="op">:</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">name</span>
+  <span class="op">}</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p>通过调用 <code>res.render</code> 函数渲染 ejs 模板，res.render 第一个参数是模板的名字，这里是 users 则会匹配 views/users.ejs，第二个参数是传给模板的数据，这里传入 name，则在 ejs 模板中可使用 name。<code>res.render</code> 的作用就是将模板和数据结合生成 html，同时设置响应头中的 <code>Content-Type: text/html</code>，告诉浏览器我返回的是 html，不是纯文本，要按 html 展示。现在我们访问 <code>localhost:3000/users/haha</code>，可以看到名称haha大写显示于浏览器内。</p>
+<p>上面代码可以看到，我们在模板 <code>&lt;%= name.toUpperCase() %&gt;</code> 中使用了 JavaScript 的语法 <code>.toUpperCase()</code> 将名字转化为大写，那这个 <code>&lt;%= xxx %&gt;</code> 是什么东西呢？ejs 有 3 种常用标签：</p>
+<ol style="list-style-type: decimal">
+<li><code>&lt;% code %&gt;</code>：运行 JavaScript 代码，不输出</li>
+<li><code>&lt;%= code %&gt;</code>：显示转义后的 HTML内容</li>
+<li><code>&lt;%- code %&gt;</code>：显示原始 HTML 内容</li>
+</ol>
+<p>下面的例子解释了 <code>&lt;% code %&gt;</code> 的用法：</p>
+<p><strong>Data</strong></p>
+<pre><code>supplies: [&#39;mop&#39;, &#39;broom&#39;, &#39;duster&#39;]</code></pre>
+<p><strong>Template</strong></p>
+<pre class="ejs"><code>&lt;ul&gt;
+&lt;% for(var i=0; i&lt;supplies.length; i++) {%&gt;
+   &lt;li&gt;&lt;%= supplies[i] %&gt;&lt;/li&gt;
+&lt;% } %&gt;
+&lt;/ul&gt;</code></pre>
+<p><strong>Result</strong></p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;ul&gt;</span>
+  <span class="kw">&lt;li&gt;</span>mop<span class="kw">&lt;/li&gt;</span>
+  <span class="kw">&lt;li&gt;</span>broom<span class="kw">&lt;/li&gt;</span>
+  <span class="kw">&lt;li&gt;</span>duster<span class="kw">&lt;/li&gt;</span>
+<span class="kw">&lt;/ul&gt;</span></code></pre></div>
+<h2 id="includes">3.3.2 includes</h2>
+<p>使用模板包含指令，可以把模板拆成可复用的模板片段组合使用。</p>
+<p>比如在 views 下新建 header.ejs 和 footer.ejs，并修改 users.ejs：</p>
+<p><strong>views/header.ejs</strong></p>
+<pre class="ejs"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+      body {padding: 50px;font: 14px &quot;Lucida Grande&quot;, Helvetica, Arial, sans-serif;}
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;</code></pre>
+<p><strong>views/footer.ejs</strong></p>
+<pre class="ejs"><code>  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p><strong>views/users.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+  &lt;h1&gt;&lt;%= name.toUpperCase() %&gt;&lt;/h1&gt;
+  &lt;p&gt;hello, &lt;%= name %&gt;&lt;/p&gt;
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<p>我们将原来的 users.ejs 拆成出了 header.ejs 和 footer.ejs，并在 users.ejs 通过 ejs 内置的 include 方法引入，从而实现了跟以前一个模板文件相同的功能。</p>
+<p>前面我们讲解了 express 中路由和模板引擎 ejs 的用法，但 express 的精髓并不在此，在于中间件的设计理念。</p>
+<h2 id="中间件与-next">3.4.1 中间件与 next</h2>
+<p>express 中的中间件（middleware）就是用来处理请求的，当一个中间件处理完，可以通过调用 <code>next()</code> 传递给下一个中间件，如果没有调用 <code>next()</code>，则请求不会往下传递，如内置的 <code>res.render</code> 其实就是渲染完 html 直接返回给客户端，没有调用 <code>next()</code>，从而没有传递给下一个中间件。看个小例子，修改 index.js 如下：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="st">&#39;1&#39;</span>)
+  <span class="at">next</span>()
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="st">&#39;2&#39;</span>)
+  <span class="va">res</span>.<span class="at">status</span>(<span class="dv">200</span>).<span class="at">end</span>()
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">listen</span>(<span class="dv">3000</span>)</code></pre></div>
+<p>此时访问 <code>localhost:3000</code>，终端会输出：</p>
+<pre><code>1
+2</code></pre>
+<p>通过 <code>app.use</code> 加载中间件，在中间件中通过 next 将请求传递到下一个中间件，next 可接受一个参数接收错误信息，如果使用了 <code>next(error)</code>，则会返回错误而不会传递到下一个中间件，修改 index.js 如下：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="st">&#39;1&#39;</span>)
+  <span class="at">next</span>(<span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;haha&#39;</span>))
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="st">&#39;2&#39;</span>)
+  <span class="va">res</span>.<span class="at">status</span>(<span class="dv">200</span>).<span class="at">end</span>()
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">listen</span>(<span class="dv">3000</span>)</code></pre></div>
+<p>此时访问 <code>localhost:3000</code>，终端会输出错误信息：</p>
+<div class="figure">
+<img src="./img/3.4.1.png" />
+
+</div>
+<p>浏览器会显示：</p>
+<div class="figure">
+<img src="./img/3.4.2.png" />
+
+</div>
+<blockquote>
+<p>小提示：<code>app.use</code> 有非常灵活的使用方式，详情见 <a href="http://expressjs.com/en/4x/api.html#app.use">官方文档</a>。</p>
+</blockquote>
+<p>express 有成百上千的第三方中间件，在开发过程中我们首先应该去 npm 上寻找是否有类似实现的中间件，尽量避免造轮子，节省开发时间。下面给出几个常用的搜索 npm 模块的网站：</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://npmjs.com" class="uri">http://npmjs.com</a>(npm 官网)</li>
+<li><a href="http://node-modules.com" class="uri">http://node-modules.com</a></li>
+<li><a href="https://npms.io" class="uri">https://npms.io</a></li>
+<li><a href="https://nodejsmodules.org" class="uri">https://nodejsmodules.org</a></li>
+</ol>
+<blockquote>
+<p>小提示：express@4 之前的版本基于 connect 这个模块实现的中间件的架构，express@4 及以上的版本则移除了对 connect 的依赖自己实现了，理论上基于 connect 的中间件（通常以 <code>connect-</code> 开头，如 <code>connect-mongo</code>）仍可结合 express 使用。</p>
+</blockquote>
+<blockquote>
+<p>注意：中间件的加载顺序很重要！比如：通常把日志中间件放到比较靠前的位置，后面将会介绍的 <code>connect-flash</code> 中间件是基于 session 的，所以需要在 <code>express-session</code> 后加载。</p>
+</blockquote>
+<h2 id="错误处理">3.4.2 错误处理</h2>
+<p>上面的例子中，应用程序为我们自动返回了错误栈信息（express 内置了一个默认的错误处理器），假如我们想手动控制返回的错误内容，则需要加载一个自定义错误处理的中间件，修改 index.js 如下：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="st">&#39;1&#39;</span>)
+  <span class="at">next</span>(<span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;haha&#39;</span>))
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="st">&#39;2&#39;</span>)
+  <span class="va">res</span>.<span class="at">status</span>(<span class="dv">200</span>).<span class="at">end</span>()
+<span class="op">}</span>)
+
+<span class="co">//错误处理</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (err<span class="op">,</span> req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">error</span>(<span class="va">err</span>.<span class="at">stack</span>)
+  <span class="va">res</span>.<span class="at">status</span>(<span class="dv">500</span>).<span class="at">send</span>(<span class="st">&#39;Something broke!&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">app</span>.<span class="at">listen</span>(<span class="dv">3000</span>)</code></pre></div>
+<p>此时访问 <code>localhost:3000</code>，浏览器会显示 <code>Something broke!</code>。</p>
+<p>从本章开始，正式学习如何使用 Express + MongoDB 搭建一个博客。</p>
+<h4 id="node.js-8.9.1">Node.js: <code>8.9.1</code></h4>
+<h4 id="mongodb-3.4.10">MongoDB: <code>3.4.10</code></h4>
+<h4 id="express-4.16.2">Express: <code>4.16.2</code></h4>
+<h2 id="目录结构">4.2.1 目录结构</h2>
+<p>我们停止 supervisor 并删除 myblog 目录从头来过。重新创建 myblog，运行 <code>npm init</code>，如下：</p>
+<div class="figure">
+<img src="./img/4.2.1.png" />
+
+</div>
+<p>在 myblog 目录下创建以下目录及空文件（package.json 除外）：</p>
+<div class="figure">
+<img src="./img/4.2.2.png" />
+
+</div>
+<p>对应文件及文件夹的用处：</p>
+<ol style="list-style-type: decimal">
+<li><code>models</code>: 存放操作数据库的文件</li>
+<li><code>public</code>: 存放静态文件，如样式、图片等</li>
+<li><code>routes</code>: 存放路由文件</li>
+<li><code>views</code>: 存放模板文件</li>
+<li><code>index.js</code>: 程序主文件</li>
+<li><code>package.json</code>: 存储项目名、描述、作者、依赖等等信息</li>
+</ol>
+<blockquote>
+<p>小提示：不知读者发现了没有，我们遵循了 MVC（模型(model)－视图(view)－控制器(controller/route)） 的开发模式。</p>
+</blockquote>
+<h2 id="安装依赖模块">4.2.2 安装依赖模块</h2>
+<p>运行以下命令安装所需模块：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i config-lite connect-flash connect-mongo ejs express express-formidable express-session marked moment mongolass objectid-to-timestamp sha1 winston express-winston --save</code></pre></div>
+<p>对应模块的用处：</p>
+<ol style="list-style-type: decimal">
+<li><code>express</code>: web 框架</li>
+<li><code>express-session</code>: session 中间件</li>
+<li><code>connect-mongo</code>: 将 session 存储于 mongodb，结合 express-session 使用</li>
+<li><code>connect-flash</code>: 页面通知的中间件，基于 session 实现</li>
+<li><code>ejs</code>: 模板</li>
+<li><code>express-formidable</code>: 接收表单及文件上传的中间件</li>
+<li><code>config-lite</code>: 读取配置文件</li>
+<li><code>marked</code>: markdown 解析</li>
+<li><code>moment</code>: 时间格式化</li>
+<li><code>mongolass</code>: mongodb 驱动</li>
+<li><code>objectid-to-timestamp</code>: 根据 ObjectId 生成时间戳</li>
+<li><code>sha1</code>: sha1 加密，用于密码加密</li>
+<li><code>winston</code>: 日志</li>
+<li><code>express-winston</code>: express 的 winston 日志中间件</li>
+</ol>
+<p>后面会详细讲解这些模块的用法。</p>
+<p>实际开发时我们会有许多环境，如本地开发环境、测试环境和线上环境等，config-lite 模块正是你需要的。</p>
+<h2 id="config-lite">4.3.1 config-lite</h2>
+<p>config-lite是一个轻量的读取配置文件的模块，根据环境变量（<code>NODE_ENV</code>）的不同加载 config 目录下不同的配置文件。如果不设置 <code>NODE_ENV</code>，则读取默认的 default 配置文件，如果设置了 <code>NODE_ENV</code>，则会合并指定的配置文件和 default 配置文件作为配置。文件可以采用如下的后缀：.js、.json、.node、.yml、.yaml。</p>
+<p>如果程序以 <code>NODE_ENV=test node app</code> 启动，则 config-lite 会依次降级查找 <code>config/test.js</code>、<code>config/test.json</code>、<code>config/test.node</code>、<code>config/test.yml</code>、<code>config/test.yaml</code> 并合并 default 配置;</p>
+<p>相应的，如果程序以 <code>NODE_ENV=production node app</code> 启动，则 config-lite 会依次降级查找 <code>config/production.js</code>、<code>config/production.json</code>、<code>config/production.node</code>、<code>config/production.yml</code>、<code>config/production.yaml</code> 并合并 default 配置。</p>
+<p>config-lite 还支持冒泡查找配置，即从传入的路径开始，从该目录不断往上一级目录查找 config 目录，直到找到或者到达根目录为止。</p>
+<p>在 myblog 下新建 config 目录，在该目录下新建 default.js，添加如下代码：</p>
+<p><strong>config/default.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="dt">port</span><span class="op">:</span> <span class="dv">3000</span><span class="op">,</span>
+  <span class="dt">session</span><span class="op">:</span> <span class="op">{</span>
+    <span class="dt">secret</span><span class="op">:</span> <span class="st">&#39;myblog&#39;</span><span class="op">,</span>
+    <span class="dt">key</span><span class="op">:</span> <span class="st">&#39;myblog&#39;</span><span class="op">,</span>
+    <span class="dt">maxAge</span><span class="op">:</span> <span class="dv">2592000000</span>
+  <span class="op">},</span>
+  <span class="dt">mongodb</span><span class="op">:</span> <span class="st">&#39;mongodb://localhost:27017/myblog&#39;</span>
+<span class="op">}</span></code></pre></div>
+<p>配置释义：</p>
+<ol style="list-style-type: decimal">
+<li><code>port</code>: 程序启动要监听的端口号</li>
+<li><code>session</code>: express-session 的配置信息，后面介绍</li>
+<li><code>mongodb</code>: mongodb 的地址，以 <code>mongodb://</code> 协议开头，<code>myblog</code> 为 db 名</li>
+</ol>
+<p>使用如下代码，即可取得配置：</p>
+<pre><code>const config = require(&#39;config-lite&#39;)(__dirname)
+console.log(config.port) // 打印端口</code></pre>
+<h2 id="功能与路由设计">4.4.1 功能与路由设计</h2>
+<p>在开发博客之前，我们首先需要明确博客要实现哪些功能。由于本教程面向初学者，所以只实现了博客最基本的功能，其余的功能（如归档、标签、分页等等）读者可自行实现。</p>
+<p>功能及路由设计如下：</p>
+<ol style="list-style-type: decimal">
+<li>注册
+<ol style="list-style-type: decimal">
+<li>注册页：<code>GET /signup</code></li>
+<li>注册（包含上传头像）：<code>POST /signup</code></li>
+</ol></li>
+<li>登录
+<ol style="list-style-type: decimal">
+<li>登录页：<code>GET /signin</code></li>
+<li>登录：<code>POST /signin</code></li>
+</ol></li>
+<li>登出：<code>GET /signout</code></li>
+<li>查看文章
+<ol style="list-style-type: decimal">
+<li>主页：<code>GET /posts</code></li>
+<li>个人主页：<code>GET /posts?author=xxx</code></li>
+<li>查看一篇文章（包含留言）：<code>GET /posts/:postId</code></li>
+</ol></li>
+<li>发表文章
+<ol style="list-style-type: decimal">
+<li>发表文章页：<code>GET /posts/create</code></li>
+<li>发表文章：<code>POST /posts/create</code></li>
+</ol></li>
+<li>修改文章
+<ol style="list-style-type: decimal">
+<li>修改文章页：<code>GET /posts/:postId/edit</code></li>
+<li>修改文章：<code>POST /posts/:postId/edit</code></li>
+</ol></li>
+<li>删除文章：<code>GET /posts/:postId/remove</code></li>
+<li>留言
+<ol style="list-style-type: decimal">
+<li>创建留言：<code>POST /comments</code></li>
+<li>删除留言：<code>GET /comments/:commentId/remove</code></li>
+</ol></li>
+</ol>
+<p>由于我们博客页面是后端渲染的，所以只通过简单的 <code>&lt;a&gt;(GET)</code> 和 <code>&lt;form&gt;(POST)</code> 与后端进行交互，如果使用 jQuery 或者其他前端框架（如 Angular、Vue、React 等等）可通过 Ajax 与后端交互，则 api 的设计应尽量遵循 Restful 风格。</p>
+<h2 id="会话">4.4.2 会话</h2>
+<p>由于HTTP协议是无状态的协议，所以服务端需要记录用户的状态时，就需要用某种机制来识别具体的用户，这个机制就是会话（Session）。 我们通过引入 express-session 中间件实现对会话的支持：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">app</span>.<span class="at">use</span>(<span class="at">session</span>(options))</code></pre></div>
+<p>session 中间件会在 req 上添加 session 对象，即 req.session 初始值为 <code>{}</code>，当我们登录后设置 <code>req.session.user = 用户信息</code>， <code>req.session.user</code>内存储有上次的值。</p>
+<h2 id="页面通知">4.4.3 页面通知</h2>
+<p>我们还需要这样一个功能：当我们操作成功时需要显示一个成功的通知，如登录成功跳转到主页时，需要显示一个 <code>登陆成功</code> 的通知；当我们操作失败时需要显示一个失败的通知，如注册时用户名被占用了，需要显示一个 <code>用户名已占用</code> 的通知。通知只显示一次，刷新后消失，我们可以通过 connect-flash 中间件实现这个功能。</p>
+<p>connect-flash 是基于 session 实现的，它的原理很简单：设置初始值 <code>req.session.flash={}</code>，通过 <code>req.flash(name, value)</code> 设置这个对象下的字段和值，通过 <code>req.flash(name)</code> 获取这个对象下的值，同时删除这个字段，实现了只显示一次刷新后消失的功能。</p>
+<h2 id="登录权限">4.4.4 登录权限</h2>
+<p>我们没有登录的话只能浏览，登陆后才能发帖或写文章，即使登录了你也不能修改或删除其他人的文章，这就是登录控制。</p>
+<p>如何实现页面的权限控制呢？我们可以把用户状态的检查封装成一个中间件，在每个需要权限控制的路由加载该中间件，即可实现页面的权限控制。在 myblog 下新建 middlewares 目录，在该目录下新建 check.js，添加如下代码：</p>
+<p><strong>middlewares/check.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="dt">checkLogin</span><span class="op">:</span> <span class="kw">function</span> <span class="at">checkLogin</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">req</span>.<span class="va">session</span>.<span class="at">user</span>) <span class="op">{</span>
+      <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="st">&#39;未登录&#39;</span>)
+      <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/signin&#39;</span>)
+    <span class="op">}</span>
+    <span class="at">next</span>()
+  <span class="op">},</span>
+
+  <span class="dt">checkNotLogin</span><span class="op">:</span> <span class="kw">function</span> <span class="at">checkNotLogin</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+    <span class="cf">if</span> (<span class="va">req</span>.<span class="va">session</span>.<span class="at">user</span>) <span class="op">{</span>
+      <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="st">&#39;已登录&#39;</span>)
+      <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)<span class="co">// 返回之前的页面</span>
+    <span class="op">}</span>
+    <span class="at">next</span>()
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>可以看出：</p>
+<ol style="list-style-type: decimal">
+<li><code>checkLogin</code>: 当用户信息（<code>req.session.user</code>）不存在，即认为用户没有登录，则跳转到登录页，同时显示 <code>未登录</code> 的通知，用于需要用户登录才能操作的页面</li>
+<li><code>checkNotLogin</code>: 当用户信息（<code>req.session.user</code>）存在，即认为用户已经登录，则跳转到之前的页面，同时显示 <code>已登录</code> 的通知，如已登录用户就禁止访问登录、注册页面</li>
+</ol>
+<p>最终我们创建以下路由文件：</p>
+<p><strong>routes/index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="kw">function</span> (app) <span class="op">{</span>
+  <span class="va">app</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+    <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/posts&#39;</span>)
+  <span class="op">}</span>)
+  <span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/signup&#39;</span><span class="op">,</span> <span class="at">require</span>(<span class="st">&#39;./signup&#39;</span>))
+  <span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/signin&#39;</span><span class="op">,</span> <span class="at">require</span>(<span class="st">&#39;./signin&#39;</span>))
+  <span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/signout&#39;</span><span class="op">,</span> <span class="at">require</span>(<span class="st">&#39;./signout&#39;</span>))
+  <span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/posts&#39;</span><span class="op">,</span> <span class="at">require</span>(<span class="st">&#39;./posts&#39;</span>))
+  <span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/comments&#39;</span><span class="op">,</span> <span class="at">require</span>(<span class="st">&#39;./comments&#39;</span>))
+<span class="op">}</span></code></pre></div>
+<p><strong>routes/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> checkLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkLogin</span>
+
+<span class="co">// GET /posts 所有用户或者特定用户的文章页</span>
+<span class="co">//   eg: GET /posts?author=xxx</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;主页&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// POST /posts/create 发表一篇文章</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/create&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;发表文章&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// GET /posts/create 发表文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/create&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;发表文章页&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// GET /posts/:postId 单独一篇的文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;文章详情页&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// GET /posts/:postId/edit 更新文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId/edit&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;更新文章页&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// POST /posts/:postId/edit 更新一篇文章</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/:postId/edit&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;更新文章&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// GET /posts/:postId/remove 删除一篇文章</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId/remove&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;删除文章&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p><strong>routes/comments.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+<span class="kw">const</span> checkLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkLogin</span>
+
+<span class="co">// POST /comments 创建一条留言</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;创建留言&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// GET /comments/:commentId/remove 删除一条留言</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:commentId/remove&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;删除留言&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p><strong>routes/signin.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> checkNotLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkNotLogin</span>
+
+<span class="co">// GET /signin 登录页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;登录页&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// POST /signin 用户登录</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;登录&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p><strong>routes/signup.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> checkNotLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkNotLogin</span>
+
+<span class="co">// GET /signup 注册页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;注册页&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// POST /signup 用户注册</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;注册&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p><strong>routes/signout.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> checkLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkLogin</span>
+
+<span class="co">// GET /signout 登出</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;登出&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p>最后，修改 index.js 如下：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> path <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;path&#39;</span>)
+<span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> session <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express-session&#39;</span>)
+<span class="kw">const</span> MongoStore <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;connect-mongo&#39;</span>)(session)
+<span class="kw">const</span> flash <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;connect-flash&#39;</span>)
+<span class="kw">const</span> config <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;config-lite&#39;</span>)(__dirname)
+<span class="kw">const</span> routes <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./routes&#39;</span>)
+<span class="kw">const</span> pkg <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./package&#39;</span>)
+
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">express</span>()
+
+<span class="co">// 设置模板目录</span>
+<span class="va">app</span>.<span class="at">set</span>(<span class="st">&#39;views&#39;</span><span class="op">,</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;views&#39;</span>))
+<span class="co">// 设置模板引擎为 ejs</span>
+<span class="va">app</span>.<span class="at">set</span>(<span class="st">&#39;view engine&#39;</span><span class="op">,</span> <span class="st">&#39;ejs&#39;</span>)
+
+<span class="co">// 设置静态文件目录</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="va">express</span>.<span class="at">static</span>(<span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;public&#39;</span>)))
+<span class="co">// session 中间件</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="at">session</span>(<span class="op">{</span>
+  <span class="dt">name</span><span class="op">:</span> <span class="va">config</span>.<span class="va">session</span>.<span class="at">key</span><span class="op">,</span> <span class="co">// 设置 cookie 中保存 session id 的字段名称</span>
+  <span class="dt">secret</span><span class="op">:</span> <span class="va">config</span>.<span class="va">session</span>.<span class="at">secret</span><span class="op">,</span> <span class="co">// 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改</span>
+  <span class="dt">resave</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="co">// 强制更新 session</span>
+  <span class="dt">saveUninitialized</span><span class="op">:</span> <span class="kw">false</span><span class="op">,</span> <span class="co">// 设置为 false，强制创建一个 session，即使用户未登录</span>
+  <span class="dt">cookie</span><span class="op">:</span> <span class="op">{</span>
+    <span class="dt">maxAge</span><span class="op">:</span> <span class="va">config</span>.<span class="va">session</span>.<span class="at">maxAge</span><span class="co">// 过期时间，过期后 cookie 中的 session id 自动删除</span>
+  <span class="op">},</span>
+  <span class="dt">store</span><span class="op">:</span> <span class="kw">new</span> <span class="at">MongoStore</span>(<span class="op">{</span><span class="co">// 将 session 存储到 mongodb</span>
+    <span class="dt">url</span><span class="op">:</span> <span class="va">config</span>.<span class="at">mongodb</span><span class="co">// mongodb 地址</span>
+  <span class="op">}</span>)
+<span class="op">}</span>))
+<span class="co">// flash 中间件，用来显示通知</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="at">flash</span>())
+
+<span class="co">// 路由</span>
+<span class="at">routes</span>(app)
+
+<span class="co">// 监听端口，启动程序</span>
+<span class="va">app</span>.<span class="at">listen</span>(<span class="va">config</span>.<span class="at">port</span><span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="va">pkg</span>.<span class="at">name</span><span class="sc">}</span><span class="vs"> listening on port </span><span class="sc">${</span><span class="va">config</span>.<span class="at">port</span><span class="sc">}</span><span class="vs">`</span>)
+<span class="op">}</span>)</code></pre></div>
+<blockquote>
+<p>注意：中间件的加载顺序很重要。如上面设置静态文件目录的中间件应该放到 routes(app) 之前加载，这样静态文件的请求就不会落到业务逻辑的路由里；flash 中间件应该放到 session 中间件之后加载，因为 flash 是基于 session 实现的。</p>
+</blockquote>
+<p>运行 <code>supervisor index</code> 启动博客，访问以下地址查看效果：</p>
+<ol style="list-style-type: decimal">
+<li>http://localhost:3000/posts</li>
+<li>http://localhost:3000/signout</li>
+<li>http://localhost:3000/signup</li>
+</ol>
+<p>我们使用 jQuery + Semantic-UI 实现前端页面的设计，最终效果图如下:</p>
+<p><strong>注册页</strong></p>
+<div class="figure">
+<img src="./img/4.5.1.png" />
+
+</div>
+<p><strong>登录页</strong></p>
+<div class="figure">
+<img src="./img/4.5.2.png" />
+
+</div>
+<p><strong>未登录时的主页（或用户页）</strong></p>
+<div class="figure">
+<img src="./img/4.5.3.png" />
+
+</div>
+<p><strong>登录后的主页（或用户页）</strong></p>
+<div class="figure">
+<img src="./img/4.5.4.png" />
+
+</div>
+<p><strong>发表文章页</strong></p>
+<div class="figure">
+<img src="./img/4.5.5.png" />
+
+</div>
+<p><strong>编辑文章页</strong></p>
+<div class="figure">
+<img src="./img/4.5.6.png" />
+
+</div>
+<p><strong>未登录时的文章页</strong></p>
+<div class="figure">
+<img src="./img/4.5.7.png" />
+
+</div>
+<p><strong>登录后的文章页</strong></p>
+<div class="figure">
+<img src="./img/4.5.8.png" />
+
+</div>
+<p><strong>通知</strong></p>
+<p><img src="./img/4.5.9.png" /> <img src="./img/4.5.10.png" /> <img src="./img/4.5.11.png" /></p>
+<h2 id="组件">4.5.1 组件</h2>
+<p>前面提到过，我们可以将模板拆分成一些组件，然后使用 ejs 的 include 方法将组件组合起来进行渲染。我们将页面切分成以下组件：</p>
+<p><strong>主页</strong></p>
+<div class="figure">
+<img src="./img/4.5.12.png" />
+
+</div>
+<p><strong>文章页</strong></p>
+<div class="figure">
+<img src="./img/4.5.13.png" />
+
+</div>
+<p>根据上面的组件切分图，我们创建以下样式及模板文件：</p>
+<p><strong>public/css/style.css</strong></p>
+<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="co">/* ---------- 全局样式 ---------- */</span>
+
+body <span class="kw">{</span>
+  <span class="kw">width:</span> <span class="dt">1100px</span><span class="kw">;</span>
+  <span class="kw">height:</span> <span class="dt">100%</span><span class="kw">;</span>
+  <span class="kw">margin:</span> <span class="dt">0</span> <span class="dt">auto</span><span class="kw">;</span>
+  <span class="kw">padding-top:</span> <span class="dt">40px</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+a<span class="dv">:hover</span> <span class="kw">{</span>
+  <span class="kw">border-bottom:</span> <span class="dt">3px</span> <span class="dt">solid</span> <span class="dt">#4fc08d</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="fl">.button</span> <span class="kw">{</span>
+  <span class="kw">background-color:</span> <span class="dt">#4fc08d</span> <span class="kw">!important;</span>
+  <span class="kw">color:</span> <span class="dt">#fff</span> <span class="kw">!important;</span>
+<span class="kw">}</span>
+
+<span class="fl">.avatar</span> <span class="kw">{</span>
+  <span class="kw">border-radius:</span> <span class="dt">3px</span><span class="kw">;</span>
+  <span class="kw">width:</span> <span class="dt">48px</span><span class="kw">;</span>
+  <span class="kw">height:</span> <span class="dt">48px</span><span class="kw">;</span>
+  <span class="kw">float:</span> <span class="dt">right</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="co">/* ---------- nav ---------- */</span>
+
+<span class="fl">.nav</span> <span class="kw">{</span>
+  <span class="kw">margin-bottom:</span> <span class="dt">20px</span><span class="kw">;</span>
+  <span class="kw">color:</span> <span class="dt">#999</span><span class="kw">;</span>
+  <span class="kw">text-align:</span> <span class="dt">center</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="fl">.nav</span> h1 <span class="kw">{</span>
+  <span class="kw">color:</span> <span class="dt">#4fc08d</span><span class="kw">;</span>
+  <span class="kw">display:</span> <span class="dt">inline-block</span><span class="kw">;</span>
+  <span class="kw">margin:</span> <span class="dt">10px</span> <span class="dt">0</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="co">/* ---------- nav-setting ---------- */</span>
+
+<span class="fl">.nav-setting</span> <span class="kw">{</span>
+  <span class="kw">position:</span> <span class="dt">fixed</span><span class="kw">;</span>
+  <span class="kw">right:</span> <span class="dt">30px</span><span class="kw">;</span>
+  <span class="kw">top:</span> <span class="dt">35px</span><span class="kw">;</span>
+  <span class="kw">z-index:</span> <span class="dt">999</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="fl">.nav-setting</span> <span class="fl">.ui.dropdown.button</span> <span class="kw">{</span>
+  <span class="kw">padding:</span> <span class="dt">10px</span> <span class="dt">10px</span> <span class="dt">0</span> <span class="dt">10px</span><span class="kw">;</span>
+  <span class="kw">background-color:</span> <span class="dt">#fff</span> <span class="kw">!important;</span>
+<span class="kw">}</span>
+
+<span class="fl">.nav-setting</span> <span class="fl">.icon.bars</span> <span class="kw">{</span>
+  <span class="kw">color:</span> <span class="dt">#000</span><span class="kw">;</span>
+  <span class="kw">font-size:</span> <span class="dt">18px</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="co">/* ---------- post-content ---------- */</span>
+
+<span class="fl">.post-content</span> h3 a <span class="kw">{</span>
+  <span class="kw">color:</span> <span class="dt">#4fc08d</span> <span class="kw">!important;</span>
+<span class="kw">}</span>
+
+<span class="fl">.post-content</span> <span class="fl">.tag</span> <span class="kw">{</span>
+  <span class="kw">font-size:</span> <span class="dt">13px</span><span class="kw">;</span>
+  <span class="kw">margin-right:</span> <span class="dt">5px</span><span class="kw">;</span>
+  <span class="kw">color:</span> <span class="dt">#999</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="fl">.post-content</span> <span class="fl">.tag.right</span> <span class="kw">{</span>
+  <span class="kw">float:</span> <span class="dt">right</span><span class="kw">;</span>
+  <span class="kw">margin-right:</span> <span class="dt">0</span><span class="kw">;</span>
+<span class="kw">}</span>
+
+<span class="fl">.post-content</span> <span class="fl">.tag.right</span> a <span class="kw">{</span>
+  <span class="kw">color:</span> <span class="dt">#999</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre></div>
+<p><strong>views/header.ejs</strong></p>
+<pre class="ejs"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;&lt;%= blog.title %&gt;&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;/css/style.css&quot;&gt;
+    &lt;script src=&quot;//cdn.bootcss.com/jquery/1.11.3/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;//cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  &lt;%- include(&#39;components/nav&#39;) %&gt;
+  &lt;%- include(&#39;components/nav-setting&#39;) %&gt;
+  &lt;%- include(&#39;components/notification&#39;) %&gt;</code></pre>
+<p><strong>views/footer.ejs</strong></p>
+<pre class="ejs"><code>  &lt;script type=&quot;text/javascript&quot;&gt;
+   $(document).ready(function () {
+      // 点击按钮弹出下拉框
+      $(&#39;.ui.dropdown&#39;).dropdown();
+      
+      // 鼠标悬浮在头像上，弹出气泡提示框
+      $(&#39;.post-content .avatar-link&#39;).popup({
+        inline: true,
+        position: &#39;bottom right&#39;,
+        lastResort: &#39;bottom right&#39;
+      });
+    })
+  &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<blockquote>
+<p>注意：上面 <code>&lt;script&gt;&lt;/script&gt;</code> 是 semantic-ui 操控页面控件的代码，一定要放到 footer.ejs 的 <code>&lt;/body&gt;</code> 的前面，因为只有页面加载完后才能通过 JQuery 获取 DOM 元素。</p>
+</blockquote>
+<p>在 views 目录下新建 components 目录用来存放组件（即可以复用的模板片段），在该目录下创建以下文件：</p>
+<p><strong>views/components/nav.ejs</strong></p>
+<pre class="ejs"><code>&lt;div class=&quot;nav&quot;&gt;
+  &lt;div class=&quot;ui grid&quot;&gt;
+    &lt;div class=&quot;four wide column&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;eight wide column&quot;&gt;
+      &lt;a href=&quot;/posts&quot;&gt;&lt;h1&gt;&lt;%= blog.title %&gt;&lt;/h1&gt;&lt;/a&gt;
+      &lt;p&gt;&lt;%= blog.description %&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p><strong>views/components/nav-setting.ejs</strong></p>
+<pre class="ejs"><code>&lt;div class=&quot;nav-setting&quot;&gt;
+  &lt;div class=&quot;ui buttons&quot;&gt;
+    &lt;div class=&quot;ui floating dropdown button&quot;&gt;
+      &lt;i class=&quot;icon bars&quot;&gt;&lt;/i&gt;
+      &lt;div class=&quot;menu&quot;&gt;
+        &lt;% if (user) { %&gt;
+          &lt;a class=&quot;item&quot; href=&quot;/posts?author=&lt;%= user._id %&gt;&quot;&gt;个人主页&lt;/a&gt;
+          &lt;div class=&quot;divider&quot;&gt;&lt;/div&gt;
+          &lt;a class=&quot;item&quot; href=&quot;/posts/create&quot;&gt;发表文章&lt;/a&gt;
+          &lt;a class=&quot;item&quot; href=&quot;/signout&quot;&gt;登出&lt;/a&gt;
+        &lt;% } else { %&gt;
+          &lt;a class=&quot;item&quot; href=&quot;/signin&quot;&gt;登录&lt;/a&gt;
+          &lt;a class=&quot;item&quot; href=&quot;/signup&quot;&gt;注册&lt;/a&gt;
+        &lt;% } %&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p><strong>views/components/notification.ejs</strong></p>
+<pre class="ejs"><code>&lt;div class=&quot;ui grid&quot;&gt;
+  &lt;div class=&quot;four wide column&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;eight wide column&quot;&gt;
+
+  &lt;% if (success) { %&gt;
+    &lt;div class=&quot;ui success message&quot;&gt;
+      &lt;p&gt;&lt;%= success %&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;% } %&gt;
+
+  &lt;% if (error) { %&gt;
+    &lt;div class=&quot;ui error message&quot;&gt;
+      &lt;p&gt;&lt;%= error %&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;% } %&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<h2 id="app.locals-和-res.locals">4.5.2 app.locals 和 res.locals</h2>
+<p>上面的 ejs 模板中我们用到了 blog、user、success、error 变量，我们将 blog 变量挂载到 <code>app.locals</code> 下，将 user、success、error 挂载到 <code>res.locals</code> 下。为什么要这么做呢？<code>app.locals</code> 和 <code>res.locals</code> 是什么？它们有什么区别？</p>
+<p>express 中有两个对象可用于模板的渲染：<code>app.locals</code> 和 <code>res.locals</code>。两者区别见文尾。</p>
+<p>修改 index.js，在 <code>routes(app)</code> 上一行添加如下代码：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// 设置模板全局常量</span>
+<span class="va">app</span>.<span class="va">locals</span>.<span class="at">blog</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="dt">title</span><span class="op">:</span> <span class="va">pkg</span>.<span class="at">name</span><span class="op">,</span>
+  <span class="dt">description</span><span class="op">:</span> <span class="va">pkg</span>.<span class="at">description</span>
+<span class="op">}</span>
+
+<span class="co">// 添加模板必需的三个变量</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="va">locals</span>.<span class="at">user</span> <span class="op">=</span> <span class="va">req</span>.<span class="va">session</span>.<span class="at">user</span>
+  <span class="va">res</span>.<span class="va">locals</span>.<span class="at">success</span> <span class="op">=</span> <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span>).<span class="at">toString</span>()
+  <span class="va">res</span>.<span class="va">locals</span>.<span class="at">error</span> <span class="op">=</span> <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span>).<span class="at">toString</span>()
+  <span class="at">next</span>()
+<span class="op">}</span>)</code></pre></div>
+<p>这样在调用 <code>res.render</code> 的时候就不用传入这四个变量了，express 为我们自动 merge 并传入了模板，所以我们可以在模板中直接使用这四个变量。</p>
+<p>我们使用 <a href="https://github.com/mongolass/mongolass">Mongolass</a> 这个模块操作 mongodb 进行增删改查。在 myblog 下新建 lib 目录，在该目录下新建 mongo.js，添加如下代码：</p>
+<p><strong>lib/mongo.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> config <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;config-lite&#39;</span>)(__dirname)
+<span class="kw">const</span> Mongolass <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;mongolass&#39;</span>)
+<span class="kw">const</span> mongolass <span class="op">=</span> <span class="kw">new</span> <span class="at">Mongolass</span>()
+<span class="va">mongolass</span>.<span class="at">connect</span>(<span class="va">config</span>.<span class="at">mongodb</span>)</code></pre></div>
+<h2 id="用户模型设计">4.7.1 用户模型设计</h2>
+<p>我们只存储用户的名称、密码（加密后的）、头像、性别和个人简介这几个字段，对应修改 lib/mongo.js，添加如下代码：</p>
+<p><strong>lib/mongo.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">exports</span>.<span class="at">User</span> <span class="op">=</span> <span class="va">mongolass</span>.<span class="at">model</span>(<span class="st">&#39;User&#39;</span><span class="op">,</span> <span class="op">{</span>
+  <span class="dt">name</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">password</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">avatar</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">gender</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">enum</span><span class="op">:</span> [<span class="st">&#39;m&#39;</span><span class="op">,</span> <span class="st">&#39;f&#39;</span><span class="op">,</span> <span class="st">&#39;x&#39;</span>]<span class="op">,</span> <span class="dt">default</span><span class="op">:</span> <span class="st">&#39;x&#39;</span> <span class="op">},</span>
+  <span class="dt">bio</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">}</span>
+<span class="op">}</span>)
+<span class="va">exports</span>.<span class="va">User</span>.<span class="at">index</span>(<span class="op">{</span> <span class="dt">name</span><span class="op">:</span> <span class="dv">1</span> <span class="op">},</span> <span class="op">{</span> <span class="dt">unique</span><span class="op">:</span> <span class="kw">true</span> <span class="op">}</span>).<span class="at">exec</span>()<span class="co">// 根据用户名找到用户，用户名全局唯一</span></code></pre></div>
+<p>我们定义了用户表的 schema，生成并导出了 User 这个 model，同时设置了 name 的唯一索引，保证用户名是不重复的。</p>
+<blockquote>
+<p>小提示：<code>required: true</code> 表示该字段是必需的，<code>default: xxx</code> 用于创建文档时设置默认值。更多关于 Mongolass 的 schema 的用法，请查阅 <a href="https://github.com/nswbmw/another-json-schema">another-json-schema</a>。</p>
+</blockquote>
+<blockquote>
+<p>小提示：Mongolass 中的 model 你可以认为相当于 mongodb 中的 collection，只不过添加了插件的功能。</p>
+</blockquote>
+<h2 id="注册页">4.7.2 注册页</h2>
+<p>首先，我们来完成注册。新建 views/signup.ejs，添加如下代码：</p>
+<p><strong>views/signup.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+
+&lt;div class=&quot;ui grid&quot;&gt;
+  &lt;div class=&quot;four wide column&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;eight wide column&quot;&gt;
+    &lt;form class=&quot;ui form segment&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;用户名&lt;/label&gt;
+        &lt;input placeholder=&quot;用户名&quot; type=&quot;text&quot; name=&quot;name&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;密码&lt;/label&gt;
+        &lt;input placeholder=&quot;密码&quot; type=&quot;password&quot; name=&quot;password&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;重复密码&lt;/label&gt;
+        &lt;input placeholder=&quot;重复密码&quot; type=&quot;password&quot; name=&quot;repassword&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;性别&lt;/label&gt;
+        &lt;select class=&quot;ui compact selection dropdown&quot; name=&quot;gender&quot;&gt;
+          &lt;option value=&quot;m&quot;&gt;男&lt;/option&gt;
+          &lt;option value=&quot;f&quot;&gt;女&lt;/option&gt;
+          &lt;option value=&quot;x&quot;&gt;保密&lt;/option&gt;
+        &lt;/select&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;头像&lt;/label&gt;
+        &lt;input type=&quot;file&quot; name=&quot;avatar&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;个人简介&lt;/label&gt;
+        &lt;textarea name=&quot;bio&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+      &lt;input type=&quot;submit&quot; class=&quot;ui button fluid&quot; value=&quot;注册&quot;&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<blockquote>
+<p>注意：form 表单要添加 <code>enctype=&quot;multipart/form-data&quot;</code> 属性才能上传文件。</p>
+</blockquote>
+<p>修改 routes/signup.js 中获取注册页的路由如下：</p>
+<p><strong>routes/signup.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /signup 注册页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;signup&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>现在访问 <code>localhost:3000/signup</code> 看看效果吧。</p>
+<h2 id="注册与文件上传">4.7.3 注册与文件上传</h2>
+<p>我们使用 <a href="https://www.npmjs.com/package/express-formidable">express-formidable</a> 处理 form 表单（包括文件上传）。修改 index.js ，在 <code>app.use(flash())</code> 下一行添加如下代码：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// 处理表单及文件上传的中间件</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="at">require</span>(<span class="st">&#39;express-formidable&#39;</span>)(<span class="op">{</span>
+  <span class="dt">uploadDir</span><span class="op">:</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;public/img&#39;</span>)<span class="op">,</span> <span class="co">// 上传文件目录</span>
+  <span class="dt">keepExtensions</span><span class="op">:</span> <span class="kw">true</span><span class="co">// 保留后缀</span>
+<span class="op">}</span>))</code></pre></div>
+<p>新建 models/users.js，添加如下代码：</p>
+<p><strong>models/users.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> User <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../lib/mongo&#39;</span>).<span class="at">User</span>
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="co">// 注册一个用户</span>
+  <span class="dt">create</span><span class="op">:</span> <span class="kw">function</span> <span class="at">create</span> (user) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">User</span>.<span class="at">create</span>(user).<span class="at">exec</span>()
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>完善处理用户注册的路由，最终修改 routes/signup.js 如下：</p>
+<p><strong>routes/signup.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> fs <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;fs&#39;</span>)
+<span class="kw">const</span> path <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;path&#39;</span>)
+<span class="kw">const</span> sha1 <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;sha1&#39;</span>)
+<span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> UserModel <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../models/users&#39;</span>)
+<span class="kw">const</span> checkNotLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkNotLogin</span>
+
+<span class="co">// GET /signup 注册页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;signup&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// POST /signup 用户注册</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> name <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">name</span>
+  <span class="kw">const</span> gender <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">gender</span>
+  <span class="kw">const</span> bio <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">bio</span>
+  <span class="kw">const</span> avatar <span class="op">=</span> <span class="va">req</span>.<span class="va">files</span>.<span class="va">avatar</span>.<span class="va">path</span>.<span class="at">split</span>(<span class="va">path</span>.<span class="at">sep</span>).<span class="at">pop</span>()
+  <span class="kw">let</span> password <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">password</span>
+  <span class="kw">const</span> repassword <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">repassword</span>
+
+  <span class="co">// 校验参数</span>
+  <span class="cf">try</span> <span class="op">{</span>
+    <span class="cf">if</span> (<span class="op">!</span>(<span class="va">name</span>.<span class="at">length</span> <span class="op">&gt;=</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> <span class="va">name</span>.<span class="at">length</span> <span class="op">&lt;=</span> <span class="dv">10</span>)) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;名字请限制在 1-10 个字符&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> ([<span class="st">&#39;m&#39;</span><span class="op">,</span> <span class="st">&#39;f&#39;</span><span class="op">,</span> <span class="st">&#39;x&#39;</span>].<span class="at">indexOf</span>(gender) <span class="op">===</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;性别只能是 m、f 或 x&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> (<span class="op">!</span>(<span class="va">bio</span>.<span class="at">length</span> <span class="op">&gt;=</span> <span class="dv">1</span> <span class="op">&amp;&amp;</span> <span class="va">bio</span>.<span class="at">length</span> <span class="op">&lt;=</span> <span class="dv">30</span>)) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;个人简介请限制在 1-30 个字符&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">req</span>.<span class="va">files</span>.<span class="va">avatar</span>.<span class="at">name</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;缺少头像&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> (<span class="va">password</span>.<span class="at">length</span> <span class="op">&lt;</span> <span class="dv">6</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;密码至少 6 个字符&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> (password <span class="op">!==</span> repassword) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;两次输入密码不一致&#39;</span>)
+    <span class="op">}</span>
+  <span class="op">}</span> <span class="cf">catch</span> (e) <span class="op">{</span>
+    <span class="co">// 注册失败，异步删除上传的头像</span>
+    <span class="va">fs</span>.<span class="at">unlink</span>(<span class="va">req</span>.<span class="va">files</span>.<span class="va">avatar</span>.<span class="at">path</span>)
+    <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="va">e</span>.<span class="at">message</span>)
+    <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/signup&#39;</span>)
+  <span class="op">}</span>
+
+  <span class="co">// 明文密码加密</span>
+  password <span class="op">=</span> <span class="at">sha1</span>(password)
+
+  <span class="co">// 待写入数据库的用户信息</span>
+  <span class="kw">let</span> user <span class="op">=</span> <span class="op">{</span>
+    <span class="dt">name</span><span class="op">:</span> name<span class="op">,</span>
+    <span class="dt">password</span><span class="op">:</span> password<span class="op">,</span>
+    <span class="dt">gender</span><span class="op">:</span> gender<span class="op">,</span>
+    <span class="dt">bio</span><span class="op">:</span> bio<span class="op">,</span>
+    <span class="dt">avatar</span><span class="op">:</span> avatar
+  <span class="op">}</span>
+  <span class="co">// 用户信息写入数据库</span>
+  <span class="va">UserModel</span>.<span class="at">create</span>(user)
+    .<span class="at">then</span>(<span class="kw">function</span> (result) <span class="op">{</span>
+      <span class="co">// 此 user 是插入 mongodb 后的值，包含 _id</span>
+      user <span class="op">=</span> <span class="va">result</span>.<span class="at">ops</span>[<span class="dv">0</span>]
+      <span class="co">// 删除密码这种敏感信息，将用户信息存入 session</span>
+      <span class="kw">delete</span> <span class="va">user</span>.<span class="at">password</span>
+      <span class="va">req</span>.<span class="va">session</span>.<span class="at">user</span> <span class="op">=</span> user
+      <span class="co">// 写入 flash</span>
+      <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;注册成功&#39;</span>)
+      <span class="co">// 跳转到首页</span>
+      <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/posts&#39;</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(<span class="kw">function</span> (e) <span class="op">{</span>
+      <span class="co">// 注册失败，异步删除上传的头像</span>
+      <span class="va">fs</span>.<span class="at">unlink</span>(<span class="va">req</span>.<span class="va">files</span>.<span class="va">avatar</span>.<span class="at">path</span>)
+      <span class="co">// 用户名被占用则跳回注册页，而不是错误页</span>
+      <span class="cf">if</span> (<span class="va">e</span>.<span class="va">message</span>.<span class="at">match</span>(<span class="st">&#39;duplicate key&#39;</span>)) <span class="op">{</span>
+        <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="st">&#39;用户名已被占用&#39;</span>)
+        <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/signup&#39;</span>)
+      <span class="op">}</span>
+      <span class="at">next</span>(e)
+    <span class="op">}</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p>我们使用 express-formidable 处理表单的上传，表单普通字段挂载到 req.fields 上，表单上传后的文件挂载到 req.files 上，文件存储在 public/img 目录下。然后校验了参数，校验通过后将用户信息插入到 MongoDB 中，成功则跳转到主页并显示『注册成功』的通知，失败（如用户名被占用）则跳转回注册页面并显示『用户名已被占用』的通知。</p>
+<blockquote>
+<p>注意：我们使用 sha1 加密用户的密码，sha1 并不是一种十分安全的加密方式，实际开发中可以使用更安全的 <a href="https://www.npmjs.com/package/bcrypt">bcrypt</a> 或 <a href="https://www.npmjs.com/package/scrypt">scrypt</a> 加密。 注意：注册失败时（参数校验失败或者存数据库时出错）删除已经上传到 public/img 目录下的头像。</p>
+</blockquote>
+<p>为了方便观察效果，我们先创建主页的模板。修改 routes/posts.js 中对应代码如下：</p>
+<p><strong>routes/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;posts&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>新建 views/posts.ejs，添加如下代码：</p>
+<p><strong>views/posts.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+这是主页
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<p>访问 <code>localhost:3000/signup</code>，注册成功后如下所示：</p>
+<div class="figure">
+<img src="./img/4.7.1.png" />
+
+</div>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.6%20%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93.md">4.6 连接数据库</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.8%20%E7%99%BB%E5%87%BA%E4%B8%8E%E7%99%BB%E5%BD%95.md">4.8 登出与登录</a></p>
+<h2 id="登出">4.8.1 登出</h2>
+<p>现在我们来完成登出的功能。修改 routes/signout.js 如下：</p>
+<p><strong>routes/signout.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> checkLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkLogin</span>
+
+<span class="co">// GET /signout 登出</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="co">// 清空 session 中用户信息</span>
+  <span class="va">req</span>.<span class="va">session</span>.<span class="at">user</span> <span class="op">=</span> <span class="kw">null</span>
+  <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;登出成功&#39;</span>)
+  <span class="co">// 登出成功后跳转到主页</span>
+  <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/posts&#39;</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p>此时刷新页面，点击右上角的 <code>登出</code>，成功后如下图所示：</p>
+<div class="figure">
+<img src="./img/4.8.1.png" />
+
+</div>
+<h2 id="登录页">4.8.2 登录页</h2>
+<p>现在我们来完成登录页。修改 routes/signin.js 相应代码如下：</p>
+<p><strong>routes/signin.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;signin&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>新建 views/signin.ejs，添加如下代码：</p>
+<p><strong>views/signin.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+
+&lt;div class=&quot;ui grid&quot;&gt;
+  &lt;div class=&quot;four wide column&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;eight wide column&quot;&gt;
+    &lt;form class=&quot;ui form segment&quot; method=&quot;post&quot;&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;用户名&lt;/label&gt;
+        &lt;input placeholder=&quot;用户名&quot; type=&quot;text&quot; name=&quot;name&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;密码&lt;/label&gt;
+        &lt;input placeholder=&quot;密码&quot; type=&quot;password&quot; name=&quot;password&quot;&gt;
+      &lt;/div&gt;
+      &lt;input type=&quot;submit&quot; class=&quot;ui button fluid&quot; value=&quot;登录&quot;&gt;
+    &lt;/form&gt;  
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<p>现在刷新页面，点击右边上角 <code>登录</code> 试试吧，我们已经看到了登录页，但先不要点击登录，接下来我们实现处理登录的逻辑。</p>
+<h2 id="登录">4.8.3 登录</h2>
+<p>现在我们来完成登录的功能。修改 models/users.js 添加 <code>getUserByName</code> 方法用于通过用户名获取用户信息：</p>
+<p><strong>models/users.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> User <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../lib/mongo&#39;</span>).<span class="at">User</span>
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="co">// 注册一个用户</span>
+  <span class="dt">create</span><span class="op">:</span> <span class="kw">function</span> <span class="at">create</span> (user) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">User</span>.<span class="at">create</span>(user).<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过用户名获取用户信息</span>
+  <span class="dt">getUserByName</span><span class="op">:</span> <span class="kw">function</span> <span class="at">getUserByName</span> (name) <span class="op">{</span>
+    <span class="cf">return</span> User
+      .<span class="at">findOne</span>(<span class="op">{</span> <span class="dt">name</span><span class="op">:</span> name <span class="op">}</span>)
+      .<span class="at">addCreatedAt</span>()
+      .<span class="at">exec</span>()
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>这里我们使用了 <code>addCreatedAt</code> 自定义插件（通过 _id 生成时间戳），修改 lib/mongo.js，添加如下代码：</p>
+<p><strong>lib/mongo.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> moment <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;moment&#39;</span>)
+<span class="kw">const</span> objectIdToTimestamp <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;objectid-to-timestamp&#39;</span>)
+
+<span class="co">// 根据 id 生成创建时间 created_at</span>
+<span class="va">mongolass</span>.<span class="at">plugin</span>(<span class="st">&#39;addCreatedAt&#39;</span><span class="op">,</span> <span class="op">{</span>
+  <span class="dt">afterFind</span><span class="op">:</span> <span class="kw">function</span> (results) <span class="op">{</span>
+    <span class="va">results</span>.<span class="at">forEach</span>(<span class="kw">function</span> (item) <span class="op">{</span>
+      <span class="va">item</span>.<span class="at">created_at</span> <span class="op">=</span> <span class="at">moment</span>(<span class="at">objectIdToTimestamp</span>(<span class="va">item</span>.<span class="at">_id</span>)).<span class="at">format</span>(<span class="st">&#39;YYYY-MM-DD HH:mm&#39;</span>)
+    <span class="op">}</span>)
+    <span class="cf">return</span> results
+  <span class="op">},</span>
+  <span class="dt">afterFindOne</span><span class="op">:</span> <span class="kw">function</span> (result) <span class="op">{</span>
+    <span class="cf">if</span> (result) <span class="op">{</span>
+      <span class="va">result</span>.<span class="at">created_at</span> <span class="op">=</span> <span class="at">moment</span>(<span class="at">objectIdToTimestamp</span>(<span class="va">result</span>.<span class="at">_id</span>)).<span class="at">format</span>(<span class="st">&#39;YYYY-MM-DD HH:mm&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">return</span> result
+  <span class="op">}</span>
+<span class="op">}</span>)</code></pre></div>
+<blockquote>
+<p>小提示：24 位长的 ObjectId 前 4 个字节是精确到秒的时间戳，所以我们没有额外的存创建时间（如: createdAt）的字段。ObjectId 生成规则：</p>
+</blockquote>
+<div class="figure">
+<img src="./img/4.8.2.png" />
+
+</div>
+<p>修改 routes/signin.js 如下：</p>
+<p><strong>routes/signin.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> sha1 <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;sha1&#39;</span>)
+<span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> UserModel <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../models/users&#39;</span>)
+<span class="kw">const</span> checkNotLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkNotLogin</span>
+
+<span class="co">// GET /signin 登录页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;signin&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// POST /signin 用户登录</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkNotLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> name <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">name</span>
+  <span class="kw">const</span> password <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">password</span>
+
+  <span class="co">// 校验参数</span>
+  <span class="cf">try</span> <span class="op">{</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">name</span>.<span class="at">length</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;请填写用户名&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">password</span>.<span class="at">length</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;请填写密码&#39;</span>)
+    <span class="op">}</span>
+  <span class="op">}</span> <span class="cf">catch</span> (e) <span class="op">{</span>
+    <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="va">e</span>.<span class="at">message</span>)
+    <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+  <span class="op">}</span>
+
+  <span class="va">UserModel</span>.<span class="at">getUserByName</span>(name)
+    .<span class="at">then</span>(<span class="kw">function</span> (user) <span class="op">{</span>
+      <span class="cf">if</span> (<span class="op">!</span>user) <span class="op">{</span>
+        <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="st">&#39;用户不存在&#39;</span>)
+        <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+      <span class="op">}</span>
+      <span class="co">// 检查密码是否匹配</span>
+      <span class="cf">if</span> (<span class="at">sha1</span>(password) <span class="op">!==</span> <span class="va">user</span>.<span class="at">password</span>) <span class="op">{</span>
+        <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="st">&#39;用户名或密码错误&#39;</span>)
+        <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+      <span class="op">}</span>
+      <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;登录成功&#39;</span>)
+      <span class="co">// 用户信息写入 session</span>
+      <span class="kw">delete</span> <span class="va">user</span>.<span class="at">password</span>
+      <span class="va">req</span>.<span class="va">session</span>.<span class="at">user</span> <span class="op">=</span> user
+      <span class="co">// 跳转到主页</span>
+      <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/posts&#39;</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(next)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p>这里我们在 POST /signin 的路由处理函数中，通过传上来的 name 去数据库中找到对应用户，校验传上来的密码是否跟数据库中的一致。不一致则返回上一页（即登录页）并显示『用户名或密码错误』的通知，一致则将用户信息写入 session，跳转到主页并显示『登录成功』的通知。</p>
+<p>现在刷新页面，点击右上角 <code>登录</code>，用刚才注册的账号登录，如下图所示：</p>
+<div class="figure">
+<img src="./img/4.8.3.png" />
+
+</div>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.7%20%E6%B3%A8%E5%86%8C.md">4.7 注册</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.9%20%E6%96%87%E7%AB%A0.md">4.9 文章</a></p>
+<h2 id="文章模型设计">4.9.1 文章模型设计</h2>
+<p>我们只存储文章的作者 id、标题、正文和点击量这几个字段，对应修改 lib/mongo.js，添加如下代码：</p>
+<p><strong>lib/mongo.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">exports</span>.<span class="at">Post</span> <span class="op">=</span> <span class="va">mongolass</span>.<span class="at">model</span>(<span class="st">&#39;Post&#39;</span><span class="op">,</span> <span class="op">{</span>
+  <span class="dt">author</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="va">Mongolass</span>.<span class="va">Types</span>.<span class="at">ObjectId</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">title</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">content</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">pv</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;number&#39;</span><span class="op">,</span> <span class="dt">default</span><span class="op">:</span> <span class="dv">0</span> <span class="op">}</span>
+<span class="op">}</span>)
+<span class="va">exports</span>.<span class="va">Post</span>.<span class="at">index</span>(<span class="op">{</span> <span class="dt">author</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">_id</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> <span class="op">}</span>).<span class="at">exec</span>()<span class="co">// 按创建时间降序查看用户的文章列表</span></code></pre></div>
+<h2 id="发表文章">4.9.2 发表文章</h2>
+<p>现在我们来实现发表文章的功能。首先创建发表文章页，新建 views/create.ejs，添加如下代码：</p>
+<p><strong>views/create.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+
+&lt;div class=&quot;ui grid&quot;&gt;
+  &lt;div class=&quot;four wide column&quot;&gt;
+    &lt;a class=&quot;avatar avatar-link&quot;
+       href=&quot;/posts?author=&lt;%= user._id %&gt;&quot;
+       data-title=&quot;&lt;%= user.name %&gt; | &lt;%= ({m: &#39;男&#39;, f: &#39;女&#39;, x: &#39;保密&#39;})[user.gender] %&gt;&quot;
+       data-content=&quot;&lt;%= user.bio %&gt;&quot;&gt;
+      &lt;img class=&quot;avatar&quot; src=&quot;/img/&lt;%= user.avatar %&gt;&quot;&gt;
+    &lt;/a&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;eight wide column&quot;&gt;
+    &lt;form class=&quot;ui form segment&quot; method=&quot;post&quot;&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;标题&lt;/label&gt;
+        &lt;input type=&quot;text&quot; name=&quot;title&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;field required&quot;&gt;
+        &lt;label&gt;内容&lt;/label&gt;
+        &lt;textarea name=&quot;content&quot; rows=&quot;15&quot;&gt;&lt;/textarea&gt;
+      &lt;/div&gt;
+      &lt;input type=&quot;submit&quot; class=&quot;ui button&quot; value=&quot;发布&quot;&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<p>修改 routes/posts.js，将：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/create 发表文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/create&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;发表文章页&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/create 发表文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/create&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;create&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>登录成功状态，点击右上角『发表文章』试下吧。</p>
+<p>发表文章页已经完成了，接下来新建 models/posts.js 用来存放与文章操作相关的代码：</p>
+<p><strong>models/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> Post <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../lib/mongo&#39;</span>).<span class="at">Post</span>
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="co">// 创建一篇文章</span>
+  <span class="dt">create</span><span class="op">:</span> <span class="kw">function</span> <span class="at">create</span> (post) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Post</span>.<span class="at">create</span>(post).<span class="at">exec</span>()
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>修改 routes/posts.js，在文件上方引入 PostModel：</p>
+<p><strong>routes/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> PostModel <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../models/posts&#39;</span>)</code></pre></div>
+<p>将：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// POST /posts/create 发表一篇文章</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/create&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;发表文章&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// POST /posts/create 发表一篇文章</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/create&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> author <span class="op">=</span> <span class="va">req</span>.<span class="va">session</span>.<span class="va">user</span>.<span class="at">_id</span>
+  <span class="kw">const</span> title <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">title</span>
+  <span class="kw">const</span> content <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">content</span>
+
+  <span class="co">// 校验参数</span>
+  <span class="cf">try</span> <span class="op">{</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">title</span>.<span class="at">length</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;请填写标题&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">content</span>.<span class="at">length</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;请填写内容&#39;</span>)
+    <span class="op">}</span>
+  <span class="op">}</span> <span class="cf">catch</span> (e) <span class="op">{</span>
+    <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="va">e</span>.<span class="at">message</span>)
+    <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+  <span class="op">}</span>
+
+  <span class="kw">let</span> post <span class="op">=</span> <span class="op">{</span>
+    <span class="dt">author</span><span class="op">:</span> author<span class="op">,</span>
+    <span class="dt">title</span><span class="op">:</span> title<span class="op">,</span>
+    <span class="dt">content</span><span class="op">:</span> content
+  <span class="op">}</span>
+
+  <span class="va">PostModel</span>.<span class="at">create</span>(post)
+    .<span class="at">then</span>(<span class="kw">function</span> (result) <span class="op">{</span>
+      <span class="co">// 此 post 是插入 mongodb 后的值，包含 _id</span>
+      post <span class="op">=</span> <span class="va">result</span>.<span class="at">ops</span>[<span class="dv">0</span>]
+      <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;发表成功&#39;</span>)
+      <span class="co">// 发表成功后跳转到该文章页</span>
+      <span class="va">res</span>.<span class="at">redirect</span>(<span class="vs">`/posts/</span><span class="sc">${</span><span class="va">post</span>.<span class="at">_id</span><span class="sc">}</span><span class="vs">`</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(next)
+<span class="op">}</span>)</code></pre></div>
+<p>这里校验了上传的表单字段，并将文章信息插入数据库，成功后跳转到该文章页并显示『发表成功』的通知，失败后请求会进入错误处理函数。</p>
+<p>现在刷新页面（登录情况下），点击右上角 <code>发表文章</code> 试试吧，发表成功后跳转到了文章页但并没有任何内容，下面我们就来实现文章页及主页。</p>
+<h2 id="主页与文章页">4.9.3 主页与文章页</h2>
+<p>现在我们来实现主页及文章页。修改 models/posts.js 如下：</p>
+<p><strong>models/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> marked <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;marked&#39;</span>)
+<span class="kw">const</span> Post <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../lib/mongo&#39;</span>).<span class="at">Post</span>
+
+<span class="co">// 将 post 的 content 从 markdown 转换成 html</span>
+<span class="va">Post</span>.<span class="at">plugin</span>(<span class="st">&#39;contentToHtml&#39;</span><span class="op">,</span> <span class="op">{</span>
+  <span class="dt">afterFind</span><span class="op">:</span> <span class="kw">function</span> (posts) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">posts</span>.<span class="at">map</span>(<span class="kw">function</span> (post) <span class="op">{</span>
+      <span class="va">post</span>.<span class="at">content</span> <span class="op">=</span> <span class="at">marked</span>(<span class="va">post</span>.<span class="at">content</span>)
+      <span class="cf">return</span> post
+    <span class="op">}</span>)
+  <span class="op">},</span>
+  <span class="dt">afterFindOne</span><span class="op">:</span> <span class="kw">function</span> (post) <span class="op">{</span>
+    <span class="cf">if</span> (post) <span class="op">{</span>
+      <span class="va">post</span>.<span class="at">content</span> <span class="op">=</span> <span class="at">marked</span>(<span class="va">post</span>.<span class="at">content</span>)
+    <span class="op">}</span>
+    <span class="cf">return</span> post
+  <span class="op">}</span>
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="co">// 创建一篇文章</span>
+  <span class="dt">create</span><span class="op">:</span> <span class="kw">function</span> <span class="at">create</span> (post) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Post</span>.<span class="at">create</span>(post).<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过文章 id 获取一篇文章</span>
+  <span class="dt">getPostById</span><span class="op">:</span> <span class="kw">function</span> <span class="at">getPostById</span> (postId) <span class="op">{</span>
+    <span class="cf">return</span> Post
+      .<span class="at">findOne</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> postId <span class="op">}</span>)
+      .<span class="at">populate</span>(<span class="op">{</span> <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;author&#39;</span><span class="op">,</span> <span class="dt">model</span><span class="op">:</span> <span class="st">&#39;User&#39;</span> <span class="op">}</span>)
+      .<span class="at">addCreatedAt</span>()
+      .<span class="at">contentToHtml</span>()
+      .<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 按创建时间降序获取所有用户文章或者某个特定用户的所有文章</span>
+  <span class="dt">getPosts</span><span class="op">:</span> <span class="kw">function</span> <span class="at">getPosts</span> (author) <span class="op">{</span>
+    <span class="kw">const</span> query <span class="op">=</span> <span class="op">{}</span>
+    <span class="cf">if</span> (author) <span class="op">{</span>
+      <span class="va">query</span>.<span class="at">author</span> <span class="op">=</span> author
+    <span class="op">}</span>
+    <span class="cf">return</span> Post
+      .<span class="at">find</span>(query)
+      .<span class="at">populate</span>(<span class="op">{</span> <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;author&#39;</span><span class="op">,</span> <span class="dt">model</span><span class="op">:</span> <span class="st">&#39;User&#39;</span> <span class="op">}</span>)
+      .<span class="at">sort</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> <span class="op">-</span><span class="dv">1</span> <span class="op">}</span>)
+      .<span class="at">addCreatedAt</span>()
+      .<span class="at">contentToHtml</span>()
+      .<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过文章 id 给 pv 加 1</span>
+  <span class="dt">incPv</span><span class="op">:</span> <span class="kw">function</span> <span class="at">incPv</span> (postId) <span class="op">{</span>
+    <span class="cf">return</span> Post
+      .<span class="at">update</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> postId <span class="op">},</span> <span class="op">{</span> <span class="dt">$inc</span><span class="op">:</span> <span class="op">{</span> <span class="dt">pv</span><span class="op">:</span> <span class="dv">1</span> <span class="op">}</span> <span class="op">}</span>)
+      .<span class="at">exec</span>()
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>需要讲解两点：</p>
+<ol style="list-style-type: decimal">
+<li>我们使用了 markdown 解析文章的内容，所以在发表文章的时候可使用 markdown 语法（如插入链接、图片等等），关于 markdown 的使用请参考： <a href="http://wowubuntu.com/markdown/">Markdown 语法说明</a>。</li>
+<li>我们在 PostModel 上注册了 <code>contentToHtml</code>，而 <code>addCreatedAt</code> 是在 lib/mongo.js 中 mongolass 上注册的。也就是说 <code>contentToHtml</code> 只针对 PostModel 有效，而 <code>addCreatedAt</code> 对所有 Model 都有效。</li>
+</ol>
+<p>接下来完成主页的模板，修改 views/posts.ejs 如下：</p>
+<p><strong>views/posts.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+
+&lt;% posts.forEach(function (post) { %&gt;
+  &lt;%- include(&#39;components/post-content&#39;, { post: post }) %&gt;
+&lt;% }) %&gt;
+
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<p>新建 views/components/post-content.ejs 用来存放单篇文章的模板片段：</p>
+<p><strong>views/components/post-content.ejs</strong></p>
+<pre class="ejs"><code>&lt;div class=&quot;post-content&quot;&gt;
+  &lt;div class=&quot;ui grid&quot;&gt;
+    &lt;div class=&quot;four wide column&quot;&gt;
+      &lt;a class=&quot;avatar avatar-link&quot;
+         href=&quot;/posts?author=&lt;%= post.author._id %&gt;&quot;
+         data-title=&quot;&lt;%= post.author.name %&gt; | &lt;%= ({m: &#39;男&#39;, f: &#39;女&#39;, x: &#39;保密&#39;})[post.author.gender] %&gt;&quot;
+         data-content=&quot;&lt;%= post.author.bio %&gt;&quot;&gt;
+        &lt;img class=&quot;avatar&quot; src=&quot;/img/&lt;%= post.author.avatar %&gt;&quot;&gt;
+      &lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;eight wide column&quot;&gt;
+      &lt;div class=&quot;ui segment&quot;&gt;
+        &lt;h3&gt;&lt;a href=&quot;/posts/&lt;%= post._id %&gt;&quot;&gt;&lt;%= post.title %&gt;&lt;/a&gt;&lt;/h3&gt;
+        &lt;pre&gt;&lt;%- post.content %&gt;&lt;/pre&gt;
+        &lt;div&gt;
+          &lt;span class=&quot;tag&quot;&gt;&lt;%= post.created_at %&gt;&lt;/span&gt;
+          &lt;span class=&quot;tag right&quot;&gt;
+            &lt;span&gt;浏览(&lt;%= post.pv || 0 %&gt;)&lt;/span&gt;
+            &lt;span&gt;留言(&lt;%= post.commentsCount || 0 %&gt;)&lt;/span&gt;
+
+            &lt;% if (user &amp;&amp; post.author._id &amp;&amp; user._id.toString() === post.author._id.toString()) { %&gt;
+              &lt;div class=&quot;ui inline dropdown&quot;&gt;
+                &lt;div class=&quot;text&quot;&gt;&lt;/div&gt;
+                &lt;i class=&quot;dropdown icon&quot;&gt;&lt;/i&gt;
+                &lt;div class=&quot;menu&quot;&gt;
+                  &lt;div class=&quot;item&quot;&gt;&lt;a href=&quot;/posts/&lt;%= post._id %&gt;/edit&quot;&gt;编辑&lt;/a&gt;&lt;/div&gt;
+                  &lt;div class=&quot;item&quot;&gt;&lt;a href=&quot;/posts/&lt;%= post._id %&gt;/remove&quot;&gt;删除&lt;/a&gt;&lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;% } %&gt;
+
+          &lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<blockquote>
+<p>注意：我们用了 <code>&lt;%- post.content %&gt;</code>，而不是 <code>&lt;%= post.content %&gt;</code>，因为 post.content 是 markdown 转换后的 html 字符串。</p>
+</blockquote>
+<p>修改 routes/posts.js，将：</p>
+<p><strong>routes/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;posts&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> author <span class="op">=</span> <span class="va">req</span>.<span class="va">query</span>.<span class="at">author</span>
+
+  <span class="va">PostModel</span>.<span class="at">getPosts</span>(author)
+    .<span class="at">then</span>(<span class="kw">function</span> (posts) <span class="op">{</span>
+      <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;posts&#39;</span><span class="op">,</span> <span class="op">{</span>
+        <span class="dt">posts</span><span class="op">:</span> posts
+      <span class="op">}</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(next)
+<span class="op">}</span>)</code></pre></div>
+<blockquote>
+<p>注意：主页与用户页通过 url 中的 author 区分。</p>
+</blockquote>
+<p>现在完成了主页与用户页，访问 <code>http://localhost:3000/posts</code> 试试吧，现在已经将我们之前创建的文章显示出来了，尝试点击用户的头像看看效果。</p>
+<p>接下来完成文章详情页。新建 views/post.ejs，添加如下代码：</p>
+<p><strong>views/post.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+&lt;%- include(&#39;components/post-content&#39;) %&gt;
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<p>打开 routes/posts.js，将：</p>
+<p><strong>routes/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/:postId 单独一篇的文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;文章详情页&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/:postId 单独一篇的文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> postId <span class="op">=</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">postId</span>
+
+  <span class="va">Promise</span>.<span class="at">all</span>([
+    <span class="va">PostModel</span>.<span class="at">getPostById</span>(postId)<span class="op">,</span> <span class="co">// 获取文章信息</span>
+    <span class="va">PostModel</span>.<span class="at">incPv</span>(postId)<span class="co">// pv 加 1</span>
+  ])
+    .<span class="at">then</span>(<span class="kw">function</span> (result) <span class="op">{</span>
+      <span class="kw">const</span> post <span class="op">=</span> result[<span class="dv">0</span>]
+      <span class="cf">if</span> (<span class="op">!</span>post) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;该文章不存在&#39;</span>)
+      <span class="op">}</span>
+
+      <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;post&#39;</span><span class="op">,</span> <span class="op">{</span>
+        <span class="dt">post</span><span class="op">:</span> post
+      <span class="op">}</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(next)
+<span class="op">}</span>)</code></pre></div>
+<p>现在刷新浏览器，点击文章的标题看看浏览器地址的变化吧。</p>
+<blockquote>
+<p>注意：浏览器地址有变化，但页面看不出区别来（因为页面布局一样），后面我们添加留言功能后就能看出区别来了。</p>
+</blockquote>
+<h2 id="编辑与删除文章">4.9.4 编辑与删除文章</h2>
+<p>现在我们来完成编辑与删除文章的功能。修改 models/posts.js，在 module.exports 对象上添加如下 3 个方法：</p>
+<p><strong>models/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// 通过文章 id 获取一篇原生文章（编辑文章）</span>
+getRawPostById<span class="op">:</span> <span class="kw">function</span> <span class="at">getRawPostById</span> (postId) <span class="op">{</span>
+  <span class="cf">return</span> Post
+    .<span class="at">findOne</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> postId <span class="op">}</span>)
+    .<span class="at">populate</span>(<span class="op">{</span> <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;author&#39;</span><span class="op">,</span> <span class="dt">model</span><span class="op">:</span> <span class="st">&#39;User&#39;</span> <span class="op">}</span>)
+    .<span class="at">exec</span>()
+<span class="op">},</span>
+
+<span class="co">// 通过文章 id 更新一篇文章</span>
+updatePostById<span class="op">:</span> <span class="kw">function</span> <span class="at">updatePostById</span> (postId<span class="op">,</span> data) <span class="op">{</span>
+  <span class="cf">return</span> <span class="va">Post</span>.<span class="at">update</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> postId <span class="op">},</span> <span class="op">{</span> <span class="dt">$set</span><span class="op">:</span> data <span class="op">}</span>).<span class="at">exec</span>()
+<span class="op">},</span>
+
+<span class="co">// 通过文章 id 删除一篇文章</span>
+delPostById<span class="op">:</span> <span class="kw">function</span> <span class="at">delPostById</span> (postId) <span class="op">{</span>
+  <span class="cf">return</span> <span class="va">Post</span>.<span class="at">deleteOne</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> postId <span class="op">}</span>).<span class="at">exec</span>()
+<span class="op">}</span></code></pre></div>
+<blockquote>
+<p>注意：不要忘了在适当位置添加逗号，如 incPv 的结束大括号后。</p>
+</blockquote>
+<blockquote>
+<p>注意：我们通过新函数 <code>getRawPostById</code> 用来获取文章原生的内容（编辑页面用），而不是用 <code>getPostById</code> 返回将 markdown 转换成 html 后的内容。</p>
+</blockquote>
+<p>新建编辑文章页 views/edit.ejs，添加如下代码：</p>
+<p><strong>views/edit.ejs</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="op">&lt;%-</span> <span class="at">include</span>(<span class="st">&#39;header&#39;</span>) <span class="op">%&gt;</span>
+
+<span class="op">&lt;</span>div <span class="kw">class</span><span class="op">=</span><span class="st">&quot;ui grid&quot;</span><span class="op">&gt;</span>
+  <span class="op">&lt;</span>div <span class="kw">class</span><span class="op">=</span><span class="st">&quot;four wide column&quot;</span><span class="op">&gt;</span>
+    <span class="op">&lt;</span>a <span class="kw">class</span><span class="op">=</span><span class="st">&quot;avatar&quot;</span>
+       href<span class="op">=</span><span class="st">&quot;/posts?author=&lt;%= user._id %&gt;&quot;</span>
+       data<span class="op">-</span>title<span class="op">=</span><span class="st">&quot;&lt;%= user.name %&gt; | &lt;%= ({m: &#39;男&#39;, f: &#39;女&#39;, x: &#39;保密&#39;})[user.gender] %&gt;&quot;</span>
+       data<span class="op">-</span>content<span class="op">=</span><span class="st">&quot;&lt;%= user.bio %&gt;&quot;</span><span class="op">&gt;</span>
+      <span class="op">&lt;</span>img <span class="kw">class</span><span class="op">=</span><span class="st">&quot;avatar&quot;</span> src<span class="op">=</span><span class="st">&quot;/img/&lt;%= user.avatar %&gt;&quot;</span><span class="op">&gt;</span>
+    <span class="op">&lt;</span><span class="ss">/a&gt;</span>
+<span class="ss">  &lt;/div</span><span class="op">&gt;</span>
+
+  <span class="op">&lt;</span>div <span class="kw">class</span><span class="op">=</span><span class="st">&quot;eight wide column&quot;</span><span class="op">&gt;</span>
+    <span class="op">&lt;</span>form <span class="kw">class</span><span class="op">=</span><span class="st">&quot;ui form segment&quot;</span> method<span class="op">=</span><span class="st">&quot;post&quot;</span> action<span class="op">=</span><span class="st">&quot;/posts/&lt;%= post._id %&gt;/edit&quot;</span><span class="op">&gt;</span>
+      <span class="op">&lt;</span>div <span class="kw">class</span><span class="op">=</span><span class="st">&quot;field required&quot;</span><span class="op">&gt;</span>
+        <span class="op">&lt;</span>label<span class="op">&gt;</span>标题<span class="op">&lt;</span><span class="ss">/label&gt;</span>
+<span class="ss">        &lt;input type=&quot;text&quot; name=&quot;title&quot; value=&quot;&lt;%= post.title %&gt;&quot;&gt;</span>
+<span class="ss">      &lt;/div</span><span class="op">&gt;</span>
+      <span class="op">&lt;</span>div <span class="kw">class</span><span class="op">=</span><span class="st">&quot;field required&quot;</span><span class="op">&gt;</span>
+        <span class="op">&lt;</span>label<span class="op">&gt;</span>内容<span class="op">&lt;</span><span class="ss">/label&gt;</span>
+<span class="ss">        &lt;textarea name=&quot;content&quot; rows=&quot;15&quot;&gt;&lt;%= post.content %&gt;&lt;/textarea</span><span class="op">&gt;</span>
+      <span class="op">&lt;</span><span class="ss">/div&gt;</span>
+<span class="ss">      &lt;input type=&quot;submit&quot; class=&quot;ui button&quot; value=&quot;发布&quot;&gt;</span>
+<span class="ss">    &lt;/form</span><span class="op">&gt;</span>
+  <span class="op">&lt;</span><span class="ss">/div&gt;</span>
+<span class="ss">&lt;/div</span><span class="op">&gt;</span>
+
+<span class="op">&lt;%-</span> <span class="at">include</span>(<span class="st">&#39;footer&#39;</span>) <span class="op">%&gt;</span></code></pre></div>
+<p>修改 routes/posts.js，将：</p>
+<p><strong>routes/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/:postId/edit 更新文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId/edit&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;更新文章页&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// POST /posts/:postId/edit 更新一篇文章</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/:postId/edit&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;更新文章&#39;</span>)
+<span class="op">}</span>)
+
+<span class="co">// GET /posts/:postId/remove 删除一篇文章</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId/remove&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">res</span>.<span class="at">send</span>(<span class="st">&#39;删除文章&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/:postId/edit 更新文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId/edit&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> postId <span class="op">=</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">postId</span>
+  <span class="kw">const</span> author <span class="op">=</span> <span class="va">req</span>.<span class="va">session</span>.<span class="va">user</span>.<span class="at">_id</span>
+
+  <span class="va">PostModel</span>.<span class="at">getRawPostById</span>(postId)
+    .<span class="at">then</span>(<span class="kw">function</span> (post) <span class="op">{</span>
+      <span class="cf">if</span> (<span class="op">!</span>post) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;该文章不存在&#39;</span>)
+      <span class="op">}</span>
+      <span class="cf">if</span> (<span class="va">author</span>.<span class="at">toString</span>() <span class="op">!==</span> <span class="va">post</span>.<span class="va">author</span>.<span class="va">_id</span>.<span class="at">toString</span>()) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;权限不足&#39;</span>)
+      <span class="op">}</span>
+      <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;edit&#39;</span><span class="op">,</span> <span class="op">{</span>
+        <span class="dt">post</span><span class="op">:</span> post
+      <span class="op">}</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(next)
+<span class="op">}</span>)
+
+<span class="co">// POST /posts/:postId/edit 更新一篇文章</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/:postId/edit&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> postId <span class="op">=</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">postId</span>
+  <span class="kw">const</span> author <span class="op">=</span> <span class="va">req</span>.<span class="va">session</span>.<span class="va">user</span>.<span class="at">_id</span>
+  <span class="kw">const</span> title <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">title</span>
+  <span class="kw">const</span> content <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">content</span>
+
+  <span class="co">// 校验参数</span>
+  <span class="cf">try</span> <span class="op">{</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">title</span>.<span class="at">length</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;请填写标题&#39;</span>)
+    <span class="op">}</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">content</span>.<span class="at">length</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;请填写内容&#39;</span>)
+    <span class="op">}</span>
+  <span class="op">}</span> <span class="cf">catch</span> (e) <span class="op">{</span>
+    <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="va">e</span>.<span class="at">message</span>)
+    <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+  <span class="op">}</span>
+
+  <span class="va">PostModel</span>.<span class="at">getRawPostById</span>(postId)
+    .<span class="at">then</span>(<span class="kw">function</span> (post) <span class="op">{</span>
+      <span class="cf">if</span> (<span class="op">!</span>post) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;文章不存在&#39;</span>)
+      <span class="op">}</span>
+      <span class="cf">if</span> (<span class="va">post</span>.<span class="va">author</span>.<span class="va">_id</span>.<span class="at">toString</span>() <span class="op">!==</span> <span class="va">author</span>.<span class="at">toString</span>()) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;没有权限&#39;</span>)
+      <span class="op">}</span>
+      <span class="va">PostModel</span>.<span class="at">updatePostById</span>(postId<span class="op">,</span> <span class="op">{</span> <span class="dt">title</span><span class="op">:</span> title<span class="op">,</span> <span class="dt">content</span><span class="op">:</span> content <span class="op">}</span>)
+        .<span class="at">then</span>(<span class="kw">function</span> () <span class="op">{</span>
+          <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;编辑文章成功&#39;</span>)
+          <span class="co">// 编辑成功后跳转到上一页</span>
+          <span class="va">res</span>.<span class="at">redirect</span>(<span class="vs">`/posts/</span><span class="sc">${</span>postId<span class="sc">}</span><span class="vs">`</span>)
+        <span class="op">}</span>)
+        .<span class="at">catch</span>(next)
+    <span class="op">}</span>)
+<span class="op">}</span>)
+
+<span class="co">// GET /posts/:postId/remove 删除一篇文章</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId/remove&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> postId <span class="op">=</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">postId</span>
+  <span class="kw">const</span> author <span class="op">=</span> <span class="va">req</span>.<span class="va">session</span>.<span class="va">user</span>.<span class="at">_id</span>
+
+  <span class="va">PostModel</span>.<span class="at">getRawPostById</span>(postId)
+    .<span class="at">then</span>(<span class="kw">function</span> (post) <span class="op">{</span>
+      <span class="cf">if</span> (<span class="op">!</span>post) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;文章不存在&#39;</span>)
+      <span class="op">}</span>
+      <span class="cf">if</span> (<span class="va">post</span>.<span class="va">author</span>.<span class="va">_id</span>.<span class="at">toString</span>() <span class="op">!==</span> <span class="va">author</span>.<span class="at">toString</span>()) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;没有权限&#39;</span>)
+      <span class="op">}</span>
+      <span class="va">PostModel</span>.<span class="at">delPostById</span>(postId)
+        .<span class="at">then</span>(<span class="kw">function</span> () <span class="op">{</span>
+          <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;删除文章成功&#39;</span>)
+          <span class="co">// 删除成功后跳转到主页</span>
+          <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/posts&#39;</span>)
+        <span class="op">}</span>)
+        .<span class="at">catch</span>(next)
+    <span class="op">}</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>现在刷新主页，点击文章右下角的小三角，编辑文章和删除文章试试吧。</p>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.8%20%E7%99%BB%E5%87%BA%E4%B8%8E%E7%99%BB%E5%BD%95.md">4.8 登出与登录</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.10%20%E7%95%99%E8%A8%80.md">4.10 留言</a></p>
+<p>现在访问一个不存在的地址，如：<code>http://localhost:3000/haha</code> 页面会显示：</p>
+<pre><code>Cannot GET /haha</code></pre>
+<p>我们来自定义 404 页面。修改 routes/index.js，在：</p>
+<p><strong>routes/index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">app</span>.<span class="at">use</span>(<span class="st">&#39;/comments&#39;</span><span class="op">,</span> <span class="at">require</span>(<span class="st">&#39;./comments&#39;</span>))</code></pre></div>
+<p>下添加如下代码：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// 404 page</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (req<span class="op">,</span> res) <span class="op">{</span>
+  <span class="cf">if</span> (<span class="op">!</span><span class="va">res</span>.<span class="at">headersSent</span>) <span class="op">{</span>
+    <span class="va">res</span>.<span class="at">status</span>(<span class="dv">404</span>).<span class="at">render</span>(<span class="st">&#39;404&#39;</span>)
+  <span class="op">}</span>
+<span class="op">}</span>)</code></pre></div>
+<p>新建 views/404.ejs，添加如下代码：</p>
+<p><strong>views/404.ejs</strong></p>
+<pre class="ejs"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;&lt;%= blog.title %&gt;&lt;/title&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.qq.com/404/search_children.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>这里我们只为了演示 express 中处理 404 的情况，用了腾讯公益的 404 页面，刷新一下页面看下效果吧。</p>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.10%20%E7%95%99%E8%A8%80.md">4.10 留言</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.12%20%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2.md">4.12 错误页面</a></p>
+<h2 id="留言模型设计">4.10.1 留言模型设计</h2>
+<p>我们只需要留言的作者 id、留言内容和关联的文章 id 这几个字段，修改 lib/mongo.js，添加如下代码：</p>
+<p><strong>lib/mongo.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">exports</span>.<span class="at">Comment</span> <span class="op">=</span> <span class="va">mongolass</span>.<span class="at">model</span>(<span class="st">&#39;Comment&#39;</span><span class="op">,</span> <span class="op">{</span>
+  <span class="dt">author</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="va">Mongolass</span>.<span class="va">Types</span>.<span class="at">ObjectId</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">content</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="st">&#39;string&#39;</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">},</span>
+  <span class="dt">postId</span><span class="op">:</span> <span class="op">{</span> <span class="dt">type</span><span class="op">:</span> <span class="va">Mongolass</span>.<span class="va">Types</span>.<span class="at">ObjectId</span><span class="op">,</span> <span class="dt">required</span><span class="op">:</span> <span class="kw">true</span> <span class="op">}</span>
+<span class="op">}</span>)
+<span class="va">exports</span>.<span class="va">Comment</span>.<span class="at">index</span>(<span class="op">{</span> <span class="dt">postId</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">_id</span><span class="op">:</span> <span class="dv">1</span> <span class="op">}</span>).<span class="at">exec</span>()<span class="co">// 通过文章 id 获取该文章下所有留言，按留言创建时间升序</span></code></pre></div>
+<h2 id="显示留言">4.10.2 显示留言</h2>
+<p>在实现留言功能之前，我们先让文章页可以显示留言列表。首先创建留言的模板，新建 views/components/comments.ejs，添加如下代码：</p>
+<p><strong>views/components/comments.ejs</strong></p>
+<pre class="ejs"><code>&lt;div class=&quot;ui grid&quot;&gt;
+  &lt;div class=&quot;four wide column&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;eight wide column&quot;&gt;
+    &lt;div class=&quot;ui segment&quot;&gt;
+      &lt;div class=&quot;ui minimal comments&quot;&gt;
+        &lt;h3 class=&quot;ui dividing header&quot;&gt;留言&lt;/h3&gt;
+
+        &lt;% comments.forEach(function (comment) { %&gt;
+          &lt;div class=&quot;comment&quot;&gt;
+            &lt;span class=&quot;avatar&quot;&gt;
+              &lt;img src=&quot;/img/&lt;%= comment.author.avatar %&gt;&quot;&gt;
+            &lt;/span&gt;
+            &lt;div class=&quot;content&quot;&gt;
+              &lt;a class=&quot;author&quot; href=&quot;/posts?author=&lt;%= comment.author._id %&gt;&quot;&gt;&lt;%= comment.author.name %&gt;&lt;/a&gt;
+              &lt;div class=&quot;metadata&quot;&gt;
+                &lt;span class=&quot;date&quot;&gt;&lt;%= comment.created_at %&gt;&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div class=&quot;text&quot;&gt;&lt;%- comment.content %&gt;&lt;/div&gt;
+
+              &lt;% if (user &amp;&amp; comment.author._id &amp;&amp; user._id.toString() === comment.author._id.toString()) { %&gt;
+                &lt;div class=&quot;actions&quot;&gt;
+                  &lt;a class=&quot;reply&quot; href=&quot;/comments/&lt;%= comment._id %&gt;/remove&quot;&gt;删除&lt;/a&gt;
+                &lt;/div&gt;
+              &lt;% } %&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;% }) %&gt;
+
+        &lt;% if (user) { %&gt;
+          &lt;form class=&quot;ui reply form&quot; method=&quot;post&quot; action=&quot;/comments&quot;&gt;
+            &lt;input name=&quot;postId&quot; value=&quot;&lt;%= post._id %&gt;&quot; hidden&gt;
+            &lt;div class=&quot;field&quot;&gt;
+              &lt;textarea name=&quot;content&quot;&gt;&lt;/textarea&gt;
+            &lt;/div&gt;
+            &lt;input type=&quot;submit&quot; class=&quot;ui icon button&quot; value=&quot;留言&quot; /&gt;
+          &lt;/form&gt;
+        &lt;% } %&gt;
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<blockquote>
+<p>注意：我们在提交留言表单时带上了文章 id（postId），通过 hidden 隐藏。</p>
+</blockquote>
+<p>在文章页引入留言的模板片段，修改 views/post.ejs 为：</p>
+<p><strong>views/post.ejs</strong></p>
+<pre class="ejs"><code>&lt;%- include(&#39;header&#39;) %&gt;
+
+&lt;%- include(&#39;components/post-content&#39;) %&gt;
+&lt;%- include(&#39;components/comments&#39;) %&gt;
+
+&lt;%- include(&#39;footer&#39;) %&gt;</code></pre>
+<p>新建 models/comments.js，存放留言相关的数据库操作，添加如下代码：</p>
+<p><strong>models/comments.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> marked <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;marked&#39;</span>)
+<span class="kw">const</span> Comment <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../lib/mongo&#39;</span>).<span class="at">Comment</span>
+
+<span class="co">// 将 comment 的 content 从 markdown 转换成 html</span>
+<span class="va">Comment</span>.<span class="at">plugin</span>(<span class="st">&#39;contentToHtml&#39;</span><span class="op">,</span> <span class="op">{</span>
+  <span class="dt">afterFind</span><span class="op">:</span> <span class="kw">function</span> (comments) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">comments</span>.<span class="at">map</span>(<span class="kw">function</span> (comment) <span class="op">{</span>
+      <span class="va">comment</span>.<span class="at">content</span> <span class="op">=</span> <span class="at">marked</span>(<span class="va">comment</span>.<span class="at">content</span>)
+      <span class="cf">return</span> comment
+    <span class="op">}</span>)
+  <span class="op">}</span>
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="co">// 创建一个留言</span>
+  <span class="dt">create</span><span class="op">:</span> <span class="kw">function</span> <span class="at">create</span> (comment) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Comment</span>.<span class="at">create</span>(comment).<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过留言 id 获取一个留言</span>
+  <span class="dt">getCommentById</span><span class="op">:</span> <span class="kw">function</span> <span class="at">getCommentById</span> (commentId) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Comment</span>.<span class="at">findOne</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> commentId <span class="op">}</span>).<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过留言 id 删除一个留言</span>
+  <span class="dt">delCommentById</span><span class="op">:</span> <span class="kw">function</span> <span class="at">delCommentById</span> (commentId) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Comment</span>.<span class="at">deleteOne</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> commentId <span class="op">}</span>).<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过文章 id 删除该文章下所有留言</span>
+  <span class="dt">delCommentsByPostId</span><span class="op">:</span> <span class="kw">function</span> <span class="at">delCommentsByPostId</span> (postId) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Comment</span>.<span class="at">deleteMany</span>(<span class="op">{</span> <span class="dt">postId</span><span class="op">:</span> postId <span class="op">}</span>).<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过文章 id 获取该文章下所有留言，按留言创建时间升序</span>
+  <span class="dt">getComments</span><span class="op">:</span> <span class="kw">function</span> <span class="at">getComments</span> (postId) <span class="op">{</span>
+    <span class="cf">return</span> Comment
+      .<span class="at">find</span>(<span class="op">{</span> <span class="dt">postId</span><span class="op">:</span> postId <span class="op">}</span>)
+      .<span class="at">populate</span>(<span class="op">{</span> <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;author&#39;</span><span class="op">,</span> <span class="dt">model</span><span class="op">:</span> <span class="st">&#39;User&#39;</span> <span class="op">}</span>)
+      .<span class="at">sort</span>(<span class="op">{</span> <span class="dt">_id</span><span class="op">:</span> <span class="dv">1</span> <span class="op">}</span>)
+      .<span class="at">addCreatedAt</span>()
+      .<span class="at">contentToHtml</span>()
+      .<span class="at">exec</span>()
+  <span class="op">},</span>
+
+  <span class="co">// 通过文章 id 获取该文章下留言数</span>
+  <span class="dt">getCommentsCount</span><span class="op">:</span> <span class="kw">function</span> <span class="at">getCommentsCount</span> (postId) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Comment</span>.<span class="at">count</span>(<span class="op">{</span> <span class="dt">postId</span><span class="op">:</span> postId <span class="op">}</span>).<span class="at">exec</span>()
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<blockquote>
+<p>小提示：我们让留言也支持了 markdown。 注意：删除一篇文章成功后也要删除该文章下所有的评论，上面 delCommentsByPostId 就是用来做这件事的。</p>
+</blockquote>
+<p>修改 models/posts.js，在：</p>
+<p><strong>models/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> Post <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../lib/mongo&#39;</span>).<span class="at">Post</span></code></pre></div>
+<p>下添加如下代码：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> CommentModel <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./comments&#39;</span>)
+
+<span class="co">// 给 post 添加留言数 commentsCount</span>
+<span class="va">Post</span>.<span class="at">plugin</span>(<span class="st">&#39;addCommentsCount&#39;</span><span class="op">,</span> <span class="op">{</span>
+  <span class="dt">afterFind</span><span class="op">:</span> <span class="kw">function</span> (posts) <span class="op">{</span>
+    <span class="cf">return</span> <span class="va">Promise</span>.<span class="at">all</span>(<span class="va">posts</span>.<span class="at">map</span>(<span class="kw">function</span> (post) <span class="op">{</span>
+      <span class="cf">return</span> <span class="va">CommentModel</span>.<span class="at">getCommentsCount</span>(<span class="va">post</span>.<span class="at">_id</span>).<span class="at">then</span>(<span class="kw">function</span> (commentsCount) <span class="op">{</span>
+        <span class="va">post</span>.<span class="at">commentsCount</span> <span class="op">=</span> commentsCount
+        <span class="cf">return</span> post
+      <span class="op">}</span>)
+    <span class="op">}</span>))
+  <span class="op">},</span>
+  <span class="dt">afterFindOne</span><span class="op">:</span> <span class="kw">function</span> (post) <span class="op">{</span>
+    <span class="cf">if</span> (post) <span class="op">{</span>
+      <span class="cf">return</span> <span class="va">CommentModel</span>.<span class="at">getCommentsCount</span>(<span class="va">post</span>.<span class="at">_id</span>).<span class="at">then</span>(<span class="kw">function</span> (count) <span class="op">{</span>
+        <span class="va">post</span>.<span class="at">commentsCount</span> <span class="op">=</span> count
+        <span class="cf">return</span> post
+      <span class="op">}</span>)
+    <span class="op">}</span>
+    <span class="cf">return</span> post
+  <span class="op">}</span>
+<span class="op">}</span>)</code></pre></div>
+<p>在 PostModel 上注册了 <code>addCommentsCount</code> 用来给每篇文章添加留言数 <code>commentsCount</code>，在 <code>getPostById</code> 和 <code>getPosts</code> 方法里的：</p>
+<pre><code>.addCreatedAt()</code></pre>
+<p>下添加：</p>
+<pre><code>.addCommentsCount()</code></pre>
+<p>这样主页和文章页的文章就可以正常显示留言数了。</p>
+<p>然后将 <code>delPostById</code> 修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// 通过用户 id 和文章 id 删除一篇文章</span>
+delPostById<span class="op">:</span> <span class="kw">function</span> <span class="at">delPostById</span> (postId<span class="op">,</span> author) <span class="op">{</span>
+  <span class="cf">return</span> <span class="va">Post</span>.<span class="at">deleteOne</span>(<span class="op">{</span> <span class="dt">author</span><span class="op">:</span> author<span class="op">,</span> <span class="dt">_id</span><span class="op">:</span> postId <span class="op">}</span>)
+    .<span class="at">exec</span>()
+    .<span class="at">then</span>(<span class="kw">function</span> (res) <span class="op">{</span>
+      <span class="co">// 文章删除后，再删除该文章下的所有留言</span>
+      <span class="cf">if</span> (<span class="va">res</span>.<span class="va">result</span>.<span class="at">ok</span> <span class="op">&amp;&amp;</span> <span class="va">res</span>.<span class="va">result</span>.<span class="at">n</span> <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">{</span>
+        <span class="cf">return</span> <span class="va">CommentModel</span>.<span class="at">delCommentsByPostId</span>(postId)
+      <span class="op">}</span>
+    <span class="op">}</span>)
+<span class="op">}</span></code></pre></div>
+<blockquote>
+<p>小提示：虽然目前看起来使用 Mongolass 自定义插件并不能节省代码，反而使代码变多了。Mongolass 插件真正的优势在于：在项目非常庞大时，可通过自定义的插件随意组合（及顺序）实现不同的输出，如上面的 <code>getPostById</code> 需要将取出 markdown 转换成 html，则使用 <code>.contentToHtml()</code>，否则像 <code>getRawPostById</code> 则不必使用。</p>
+</blockquote>
+<p>修改 routes/posts.js，在：</p>
+<p><strong>routes/posts.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> PostModel <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../models/posts&#39;</span>)</code></pre></div>
+<p>下引入 CommentModel:</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> CommentModel <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../models/comments&#39;</span>)</code></pre></div>
+<p>在文章页传入留言列表，将：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/:postId 单独一篇的文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  ...
+<span class="op">}</span>)</code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// GET /posts/:postId 单独一篇的文章页</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:postId&#39;</span><span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> postId <span class="op">=</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">postId</span>
+
+  <span class="va">Promise</span>.<span class="at">all</span>([
+    <span class="va">PostModel</span>.<span class="at">getPostById</span>(postId)<span class="op">,</span> <span class="co">// 获取文章信息</span>
+    <span class="va">CommentModel</span>.<span class="at">getComments</span>(postId)<span class="op">,</span> <span class="co">// 获取该文章所有留言</span>
+    <span class="va">PostModel</span>.<span class="at">incPv</span>(postId)<span class="co">// pv 加 1</span>
+  ])
+    .<span class="at">then</span>(<span class="kw">function</span> (result) <span class="op">{</span>
+      <span class="kw">const</span> post <span class="op">=</span> result[<span class="dv">0</span>]
+      <span class="kw">const</span> comments <span class="op">=</span> result[<span class="dv">1</span>]
+      <span class="cf">if</span> (<span class="op">!</span>post) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;该文章不存在&#39;</span>)
+      <span class="op">}</span>
+
+      <span class="va">res</span>.<span class="at">render</span>(<span class="st">&#39;post&#39;</span><span class="op">,</span> <span class="op">{</span>
+        <span class="dt">post</span><span class="op">:</span> post<span class="op">,</span>
+        <span class="dt">comments</span><span class="op">:</span> comments
+      <span class="op">}</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(next)
+<span class="op">}</span>)</code></pre></div>
+<p>现在刷新文章页试试吧，此时已经显示了留言的输入框。</p>
+<h2 id="发表与删除留言">4.10.3 发表与删除留言</h2>
+<p>现在我们来实现发表与删除留言的功能。将 routes/comments.js 修改如下：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> express <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express&#39;</span>)
+<span class="kw">const</span> router <span class="op">=</span> <span class="va">express</span>.<span class="at">Router</span>()
+
+<span class="kw">const</span> checkLogin <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../middlewares/check&#39;</span>).<span class="at">checkLogin</span>
+<span class="kw">const</span> CommentModel <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../models/comments&#39;</span>)
+
+<span class="co">// POST /comments 创建一条留言</span>
+<span class="va">router</span>.<span class="at">post</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> author <span class="op">=</span> <span class="va">req</span>.<span class="va">session</span>.<span class="va">user</span>.<span class="at">_id</span>
+  <span class="kw">const</span> postId <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">postId</span>
+  <span class="kw">const</span> content <span class="op">=</span> <span class="va">req</span>.<span class="va">fields</span>.<span class="at">content</span>
+
+  <span class="co">// 校验参数</span>
+  <span class="cf">try</span> <span class="op">{</span>
+    <span class="cf">if</span> (<span class="op">!</span><span class="va">content</span>.<span class="at">length</span>) <span class="op">{</span>
+      <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;请填写留言内容&#39;</span>)
+    <span class="op">}</span>
+  <span class="op">}</span> <span class="cf">catch</span> (e) <span class="op">{</span>
+    <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="va">e</span>.<span class="at">message</span>)
+    <span class="cf">return</span> <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+  <span class="op">}</span>
+
+  <span class="kw">const</span> comment <span class="op">=</span> <span class="op">{</span>
+    <span class="dt">author</span><span class="op">:</span> author<span class="op">,</span>
+    <span class="dt">postId</span><span class="op">:</span> postId<span class="op">,</span>
+    <span class="dt">content</span><span class="op">:</span> content
+  <span class="op">}</span>
+
+  <span class="va">CommentModel</span>.<span class="at">create</span>(comment)
+    .<span class="at">then</span>(<span class="kw">function</span> () <span class="op">{</span>
+      <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;留言成功&#39;</span>)
+      <span class="co">// 留言成功后跳转到上一页</span>
+      <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+    <span class="op">}</span>)
+    .<span class="at">catch</span>(next)
+<span class="op">}</span>)
+
+<span class="co">// GET /comments/:commentId/remove 删除一条留言</span>
+<span class="va">router</span>.<span class="at">get</span>(<span class="st">&#39;/:commentId/remove&#39;</span><span class="op">,</span> checkLogin<span class="op">,</span> <span class="kw">function</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="kw">const</span> commentId <span class="op">=</span> <span class="va">req</span>.<span class="va">params</span>.<span class="at">commentId</span>
+  <span class="kw">const</span> author <span class="op">=</span> <span class="va">req</span>.<span class="va">session</span>.<span class="va">user</span>.<span class="at">_id</span>
+
+  <span class="va">CommentModel</span>.<span class="at">getCommentById</span>(commentId)
+    .<span class="at">then</span>(<span class="kw">function</span> (comment) <span class="op">{</span>
+      <span class="cf">if</span> (<span class="op">!</span>comment) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;留言不存在&#39;</span>)
+      <span class="op">}</span>
+      <span class="cf">if</span> (<span class="va">comment</span>.<span class="va">author</span>.<span class="at">toString</span>() <span class="op">!==</span> <span class="va">author</span>.<span class="at">toString</span>()) <span class="op">{</span>
+        <span class="cf">throw</span> <span class="kw">new</span> <span class="at">Error</span>(<span class="st">&#39;没有权限删除留言&#39;</span>)
+      <span class="op">}</span>
+      <span class="va">CommentModel</span>.<span class="at">delCommentById</span>(commentId)
+        .<span class="at">then</span>(<span class="kw">function</span> () <span class="op">{</span>
+          <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="st">&#39;删除留言成功&#39;</span>)
+          <span class="co">// 删除成功后跳转到上一页</span>
+          <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;back&#39;</span>)
+        <span class="op">}</span>)
+        .<span class="at">catch</span>(next)
+    <span class="op">}</span>)
+<span class="op">}</span>)
+
+<span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> router</code></pre></div>
+<p>至此，我们完成了创建留言和删除留言的逻辑。刷新页面，尝试留言试试吧。留言成功后，将鼠标悬浮在留言上可以显示出 <code>删除</code> 的按钮，点击可以删除留言。</p>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.9%20%E6%96%87%E7%AB%A0.md">4.9 文章</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.11%20404%20%E9%A1%B5%E9%9D%A2.md">4.11 404页面</a></p>
+<p>前面讲到 express 有一个内置的错误处理逻辑，如果程序出错，会直接将错误栈返回并显示到页面上。如访问：<code>localhost:3000/posts/xxx/edit</code> 没有权限编辑的文章页，将会直接在页面中显示错误栈，如下：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript">Error<span class="op">:</span> 权限不足
+    at /Users/nswbmw/Desktop/myblog/routes/<span class="va">posts</span>.<span class="at">js</span><span class="op">:</span><span class="dv">95</span><span class="op">:</span><span class="dv">15</span>
+    at <span class="op">&lt;</span>anonymous<span class="op">&gt;</span>
+    at <span class="va">process</span>.<span class="at">_tickCallback</span> (internal/process/<span class="va">next_tick</span>.<span class="at">js</span><span class="op">:</span><span class="dv">188</span><span class="op">:</span><span class="dv">7</span>)</code></pre></div>
+<p>现在我们修改代码，实现复用页面通知。修改 index.js，在 <code>app.listen</code> 上面添加如下代码：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">app</span>.<span class="at">use</span>(<span class="kw">function</span> (err<span class="op">,</span> req<span class="op">,</span> res<span class="op">,</span> next) <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">error</span>(err)
+  <span class="va">req</span>.<span class="at">flash</span>(<span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="va">err</span>.<span class="at">message</span>)
+  <span class="va">res</span>.<span class="at">redirect</span>(<span class="st">&#39;/posts&#39;</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>这里我们实现了将错误信息用页面通知展示的功能，刷新页面将会跳转到主页并显示『权限不足』的红色通知。</p>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.11%20404%20%E9%A1%B5%E9%9D%A2.md">4.11 404页面</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.13%20%E6%97%A5%E5%BF%97.md">4.13 日志</a></p>
+<p>现在我们来实现日志功能，日志分为正常请求的日志和错误请求的日志，我们希望实现这两种日志都打印到终端并写入文件。</p>
+<h2 id="winston-和-express-winston">4.13.1 winston 和 express-winston</h2>
+<p>我们使用 <a href="https://www.npmjs.com/package/winston">winston</a> 和 <a href="https://www.npmjs.com/package/express-winston">express-winston</a> 记录日志。</p>
+<p>新建 logs 目录存放日志文件，修改 index.js，在：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> pkg <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;./package&#39;</span>)</code></pre></div>
+<p>下引入所需模块：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> winston <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;winston&#39;</span>)
+<span class="kw">const</span> expressWinston <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;express-winston&#39;</span>)</code></pre></div>
+<p>将：</p>
+<pre><code>// 路由
+routes(app)</code></pre>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// 正常请求的日志</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="va">expressWinston</span>.<span class="at">logger</span>(<span class="op">{</span>
+  <span class="dt">transports</span><span class="op">:</span> [
+    <span class="kw">new</span> (<span class="va">winston</span>.<span class="va">transports</span>.<span class="at">Console</span>)(<span class="op">{</span>
+      <span class="dt">json</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>
+      <span class="dt">colorize</span><span class="op">:</span> <span class="kw">true</span>
+    <span class="op">}</span>)<span class="op">,</span>
+    <span class="kw">new</span> <span class="va">winston</span>.<span class="va">transports</span>.<span class="at">File</span>(<span class="op">{</span>
+      <span class="dt">filename</span><span class="op">:</span> <span class="st">&#39;logs/success.log&#39;</span>
+    <span class="op">}</span>)
+  ]
+<span class="op">}</span>))
+<span class="co">// 路由</span>
+<span class="at">routes</span>(app)
+<span class="co">// 错误请求的日志</span>
+<span class="va">app</span>.<span class="at">use</span>(<span class="va">expressWinston</span>.<span class="at">errorLogger</span>(<span class="op">{</span>
+  <span class="dt">transports</span><span class="op">:</span> [
+    <span class="kw">new</span> <span class="va">winston</span>.<span class="va">transports</span>.<span class="at">Console</span>(<span class="op">{</span>
+      <span class="dt">json</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>
+      <span class="dt">colorize</span><span class="op">:</span> <span class="kw">true</span>
+    <span class="op">}</span>)<span class="op">,</span>
+    <span class="kw">new</span> <span class="va">winston</span>.<span class="va">transports</span>.<span class="at">File</span>(<span class="op">{</span>
+      <span class="dt">filename</span><span class="op">:</span> <span class="st">&#39;logs/error.log&#39;</span>
+    <span class="op">}</span>)
+  ]
+<span class="op">}</span>))</code></pre></div>
+<p>刷新页面看一下终端输出及 logs 下的文件。 可以看出：winston 将正常请求的日志打印到终端并写入了 <code>logs/success.log</code>，将错误请求的日志打印到终端并写入了 <code>logs/error.log</code>。</p>
+<blockquote>
+<p>注意：记录正常请求日志的中间件要放到 <code>routes(app)</code> 之前，记录错误请求日志的中间件要放到 <code>routes(app)</code> 之后。</p>
+</blockquote>
+<h2 id="gitignore">4.13.2 .gitignore</h2>
+<p>如果我们想把项目托管到 git 服务器上（如: <a href="https://github.com">GitHub</a>），而不想把线上配置、本地调试的 logs 以及 node_modules 添加到 git 的版本控制中，这个时候就需要 .gitignore 文件了，git 会读取 .gitignore 并忽略这些文件。在 myblog 下新建 .gitignore 文件，添加如下配置：</p>
+<p><strong>.gitignore</strong></p>
+<pre><code>config/*
+!config/default.*
+npm-debug.log
+node_modules
+coverage</code></pre>
+<p>需要注意的是，通过设置：</p>
+<pre><code>config/*
+!config/default.*</code></pre>
+<p>这样只有 config/default.js 会加入 git 的版本控制，而 config 目录下的其他配置文件则会被忽略，因为把线上配置加入到 git 是一个不安全的行为，通常你需要本地或者线上环境手动创建 config/production.js，然后添加一些线上的配置（如：mongodb 配置）即可覆盖相应的 default 配置。</p>
+<blockquote>
+<p>注意：后面讲到部署到 Heroku 时，因为无法登录到 Heroku 主机，所以可以把以下两行删掉，将 config/production.js 也加入 git 中。</p>
+<pre><code>config/*
+!config/default.*</code></pre>
+</blockquote>
+<p>然后在 public/img 目录下创建 .gitignore：</p>
+<pre><code># Ignore everything in this directory
+*
+# Except this file
+!.gitignore</code></pre>
+<p>这样 git 会忽略 public/img 目录下所有上传的头像，而不忽略 public/img 目录。同理，在 logs 目录下创建 .gitignore 忽略日志文件：</p>
+<pre><code># Ignore everything in this directory
+*
+# Except this file
+!.gitignore</code></pre>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.12%20%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2.md">4.12 错误页面</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.14%20%E6%B5%8B%E8%AF%95.md">4.14 测试</a> ## 4.14.1 mocha 和 supertest</p>
+<p><a href="https://www.npmjs.com/package/mocha">mocha</a> 和 <a href="https://www.npmjs.com/package/supertest">suptertest</a> 是常用的测试组合，通常用来测试 restful 的 api 接口，这里我们也可以用来测试我们的博客应用。 在 myblog 下新建 test 文件夹存放测试文件，以注册为例讲解 mocha 和 supertest 的用法。首先安装所需模块：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i mocha supertest --save-dev</code></pre></div>
+<p>修改 package.json，将：</p>
+<p><strong>package.json</strong></p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;scripts&quot;:</span> <span class="fu">{</span>
+  <span class="dt">&quot;test&quot;</span><span class="fu">:</span> <span class="st">&quot;echo </span><span class="ch">\&quot;</span><span class="st">Error: no test specified</span><span class="ch">\&quot;</span><span class="st"> &amp;&amp; exit 1&quot;</span>
+<span class="fu">}</span></code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;scripts&quot;:</span> <span class="fu">{</span>
+  <span class="dt">&quot;test&quot;</span><span class="fu">:</span> <span class="st">&quot;mocha test&quot;</span>
+<span class="fu">}</span></code></pre></div>
+<p>指定执行 test 目录的测试。修改 index.js，将：</p>
+<p><strong>index.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="co">// 监听端口，启动程序</span>
+<span class="va">app</span>.<span class="at">listen</span>(<span class="va">config</span>.<span class="at">port</span><span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="va">pkg</span>.<span class="at">name</span><span class="sc">}</span><span class="vs"> listening on port </span><span class="sc">${</span><span class="va">config</span>.<span class="at">port</span><span class="sc">}</span><span class="vs">`</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>修改为:</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="cf">if</span> (<span class="va">module</span>.<span class="at">parent</span>) <span class="op">{</span>
+  <span class="co">// 被 require，则导出 app</span>
+  <span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> app
+<span class="op">}</span> <span class="cf">else</span> <span class="op">{</span>
+  <span class="co">// 监听端口，启动程序</span>
+  <span class="va">app</span>.<span class="at">listen</span>(<span class="va">config</span>.<span class="at">port</span><span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+    <span class="va">console</span>.<span class="at">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="va">pkg</span>.<span class="at">name</span><span class="sc">}</span><span class="vs"> listening on port </span><span class="sc">${</span><span class="va">config</span>.<span class="at">port</span><span class="sc">}</span><span class="vs">`</span>)
+  <span class="op">}</span>)
+<span class="op">}</span></code></pre></div>
+<p>这样做可以实现：直接启动 index.js 则会监听端口启动程序，如果 index.js 被 require 了，则导出 app，通常用于测试。</p>
+<p>找一张图片用于测试上传头像，放到 test 目录下，如 avatar.png。新建 test/signup.js，添加如下测试代码：</p>
+<p><strong>test/signup.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> path <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;path&#39;</span>)
+<span class="kw">const</span> assert <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;assert&#39;</span>)
+<span class="kw">const</span> request <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;supertest&#39;</span>)
+<span class="kw">const</span> app <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../index&#39;</span>)
+<span class="kw">const</span> User <span class="op">=</span> <span class="at">require</span>(<span class="st">&#39;../lib/mongo&#39;</span>).<span class="at">User</span>
+
+<span class="kw">const</span> testName1 <span class="op">=</span> <span class="st">&#39;testName1&#39;</span>
+<span class="kw">const</span> testName2 <span class="op">=</span> <span class="st">&#39;nswbmw&#39;</span>
+<span class="at">describe</span>(<span class="st">&#39;signup&#39;</span><span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+  <span class="at">describe</span>(<span class="st">&#39;POST /signup&#39;</span><span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+    <span class="kw">const</span> agent <span class="op">=</span> <span class="va">request</span>.<span class="at">agent</span>(app)<span class="co">// persist cookie when redirect</span>
+    <span class="at">beforeEach</span>(<span class="kw">function</span> (done) <span class="op">{</span>
+      <span class="co">// 创建一个用户</span>
+      <span class="va">User</span>.<span class="at">create</span>(<span class="op">{</span>
+        <span class="dt">name</span><span class="op">:</span> testName1<span class="op">,</span>
+        <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;123456&#39;</span><span class="op">,</span>
+        <span class="dt">avatar</span><span class="op">:</span> <span class="st">&#39;&#39;</span><span class="op">,</span>
+        <span class="dt">gender</span><span class="op">:</span> <span class="st">&#39;x&#39;</span><span class="op">,</span>
+        <span class="dt">bio</span><span class="op">:</span> <span class="st">&#39;&#39;</span>
+      <span class="op">}</span>)
+        .<span class="at">exec</span>()
+        .<span class="at">then</span>(<span class="kw">function</span> () <span class="op">{</span>
+          <span class="at">done</span>()
+        <span class="op">}</span>)
+        .<span class="at">catch</span>(done)
+    <span class="op">}</span>)
+
+    <span class="at">afterEach</span>(<span class="kw">function</span> (done) <span class="op">{</span>
+      <span class="co">// 删除测试用户</span>
+      <span class="va">User</span>.<span class="at">deleteMany</span>(<span class="op">{</span> <span class="dt">name</span><span class="op">:</span> <span class="op">{</span> <span class="dt">$in</span><span class="op">:</span> [testName1<span class="op">,</span> testName2] <span class="op">}</span> <span class="op">}</span>)
+        .<span class="at">exec</span>()
+        .<span class="at">then</span>(<span class="kw">function</span> () <span class="op">{</span>
+          <span class="at">done</span>()
+        <span class="op">}</span>)
+        .<span class="at">catch</span>(done)
+    <span class="op">}</span>)
+
+    <span class="at">after</span>(<span class="kw">function</span> (done) <span class="op">{</span>
+      <span class="va">process</span>.<span class="at">exit</span>()
+    <span class="op">}</span>)
+
+    <span class="co">// 用户名错误的情况</span>
+    <span class="at">it</span>(<span class="st">&#39;wrong name&#39;</span><span class="op">,</span> <span class="kw">function</span> (done) <span class="op">{</span>
+      agent
+        .<span class="at">post</span>(<span class="st">&#39;/signup&#39;</span>)
+        .<span class="at">type</span>(<span class="st">&#39;form&#39;</span>)
+        .<span class="at">attach</span>(<span class="st">&#39;avatar&#39;</span><span class="op">,</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;avatar.png&#39;</span>))
+        .<span class="at">field</span>(<span class="op">{</span> <span class="dt">name</span><span class="op">:</span> <span class="st">&#39;&#39;</span> <span class="op">}</span>)
+        .<span class="at">redirects</span>()
+        .<span class="at">end</span>(<span class="kw">function</span> (err<span class="op">,</span> res) <span class="op">{</span>
+          <span class="cf">if</span> (err) <span class="cf">return</span> <span class="at">done</span>(err)
+          <span class="at">assert</span>(<span class="va">res</span>.<span class="va">text</span>.<span class="at">match</span>(<span class="ss">/名字请限制在 1-10 个字符/</span>))
+          <span class="at">done</span>()
+        <span class="op">}</span>)
+    <span class="op">}</span>)
+
+    <span class="co">// 性别错误的情况</span>
+    <span class="at">it</span>(<span class="st">&#39;wrong gender&#39;</span><span class="op">,</span> <span class="kw">function</span> (done) <span class="op">{</span>
+      agent
+        .<span class="at">post</span>(<span class="st">&#39;/signup&#39;</span>)
+        .<span class="at">type</span>(<span class="st">&#39;form&#39;</span>)
+        .<span class="at">attach</span>(<span class="st">&#39;avatar&#39;</span><span class="op">,</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;avatar.png&#39;</span>))
+        .<span class="at">field</span>(<span class="op">{</span> <span class="dt">name</span><span class="op">:</span> testName2<span class="op">,</span> <span class="dt">gender</span><span class="op">:</span> <span class="st">&#39;a&#39;</span> <span class="op">}</span>)
+        .<span class="at">redirects</span>()
+        .<span class="at">end</span>(<span class="kw">function</span> (err<span class="op">,</span> res) <span class="op">{</span>
+          <span class="cf">if</span> (err) <span class="cf">return</span> <span class="at">done</span>(err)
+          <span class="at">assert</span>(<span class="va">res</span>.<span class="va">text</span>.<span class="at">match</span>(<span class="ss">/性别只能是 m、f 或 x/</span>))
+          <span class="at">done</span>()
+        <span class="op">}</span>)
+    <span class="op">}</span>)
+    <span class="co">// 其余的参数测试自行补充</span>
+    <span class="co">// 用户名被占用的情况</span>
+    <span class="at">it</span>(<span class="st">&#39;duplicate name&#39;</span><span class="op">,</span> <span class="kw">function</span> (done) <span class="op">{</span>
+      agent
+        .<span class="at">post</span>(<span class="st">&#39;/signup&#39;</span>)
+        .<span class="at">type</span>(<span class="st">&#39;form&#39;</span>)
+        .<span class="at">attach</span>(<span class="st">&#39;avatar&#39;</span><span class="op">,</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;avatar.png&#39;</span>))
+        .<span class="at">field</span>(<span class="op">{</span> <span class="dt">name</span><span class="op">:</span> testName1<span class="op">,</span> <span class="dt">gender</span><span class="op">:</span> <span class="st">&#39;m&#39;</span><span class="op">,</span> <span class="dt">bio</span><span class="op">:</span> <span class="st">&#39;noder&#39;</span><span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;123456&#39;</span><span class="op">,</span> <span class="dt">repassword</span><span class="op">:</span> <span class="st">&#39;123456&#39;</span> <span class="op">}</span>)
+        .<span class="at">redirects</span>()
+        .<span class="at">end</span>(<span class="kw">function</span> (err<span class="op">,</span> res) <span class="op">{</span>
+          <span class="cf">if</span> (err) <span class="cf">return</span> <span class="at">done</span>(err)
+          <span class="at">assert</span>(<span class="va">res</span>.<span class="va">text</span>.<span class="at">match</span>(<span class="ss">/用户名已被占用/</span>))
+          <span class="at">done</span>()
+        <span class="op">}</span>)
+    <span class="op">}</span>)
+
+    <span class="co">// 注册成功的情况</span>
+    <span class="at">it</span>(<span class="st">&#39;success&#39;</span><span class="op">,</span> <span class="kw">function</span> (done) <span class="op">{</span>
+      agent
+        .<span class="at">post</span>(<span class="st">&#39;/signup&#39;</span>)
+        .<span class="at">type</span>(<span class="st">&#39;form&#39;</span>)
+        .<span class="at">attach</span>(<span class="st">&#39;avatar&#39;</span><span class="op">,</span> <span class="va">path</span>.<span class="at">join</span>(__dirname<span class="op">,</span> <span class="st">&#39;avatar.png&#39;</span>))
+        .<span class="at">field</span>(<span class="op">{</span> <span class="dt">name</span><span class="op">:</span> testName2<span class="op">,</span> <span class="dt">gender</span><span class="op">:</span> <span class="st">&#39;m&#39;</span><span class="op">,</span> <span class="dt">bio</span><span class="op">:</span> <span class="st">&#39;noder&#39;</span><span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;123456&#39;</span><span class="op">,</span> <span class="dt">repassword</span><span class="op">:</span> <span class="st">&#39;123456&#39;</span> <span class="op">}</span>)
+        .<span class="at">redirects</span>()
+        .<span class="at">end</span>(<span class="kw">function</span> (err<span class="op">,</span> res) <span class="op">{</span>
+          <span class="cf">if</span> (err) <span class="cf">return</span> <span class="at">done</span>(err)
+          <span class="at">assert</span>(<span class="va">res</span>.<span class="va">text</span>.<span class="at">match</span>(<span class="ss">/注册成功/</span>))
+          <span class="at">done</span>()
+        <span class="op">}</span>)
+    <span class="op">}</span>)
+  <span class="op">}</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>此时编辑器会报语法错误（如：describe 未定义等等），修改 .eslintrc.json 如下：</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">&quot;extends&quot;</span><span class="fu">:</span> <span class="st">&quot;standard&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;globals&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+    <span class="dt">&quot;describe&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+    <span class="dt">&quot;beforeEach&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+    <span class="dt">&quot;afterEach&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+    <span class="dt">&quot;after&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+    <span class="dt">&quot;it&quot;</span><span class="fu">:</span> <span class="kw">true</span>
+  <span class="fu">}</span>
+<span class="fu">}</span></code></pre></div>
+<p>这样，eslint 会忽略 globals 中变量未定义的警告。运行 <code>npm test</code> 看看效果吧，其余的测试请读者自行完成。</p>
+<h2 id="测试覆盖率">4.14.2 测试覆盖率</h2>
+<p>我们写测试肯定想覆盖所有的情况（包括各种出错的情况及正确时的情况），但光靠想需要写哪些测试是不行的，总也会有疏漏，最简单的办法就是可以直观的看出测试是否覆盖了所有的代码，这就是测试覆盖率，即被测试覆盖到的代码行数占总代码行数的比例。</p>
+<blockquote>
+<p>注意：即使测试覆盖率达到 100% 也不能说明你的测试覆盖了所有的情况，只能说明基本覆盖了所有的情况。</p>
+</blockquote>
+<p><a href="https://www.npmjs.com/package/istanbul">istanbul</a> 是一个常用的生成测试覆盖率的库，它会将测试的结果报告生成 html 页面，并放到项目根目录的 coverage 目录下。首先安装 istanbul:</p>
+<pre><code>npm i istanbul --save-dev</code></pre>
+<p>配置 istanbul 很简单，将 package.json 中：</p>
+<p><strong>package.json</strong></p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;scripts&quot;:</span> <span class="fu">{</span>
+  <span class="dt">&quot;test&quot;</span><span class="fu">:</span> <span class="st">&quot;mocha test&quot;</span>
+<span class="fu">}</span></code></pre></div>
+<p>修改为：</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;scripts&quot;:</span> <span class="fu">{</span>
+  <span class="dt">&quot;test&quot;</span><span class="fu">:</span> <span class="st">&quot;istanbul cover _mocha&quot;</span>
+<span class="fu">}</span></code></pre></div>
+<p><strong>注意</strong>：Windows 下需要改成 <code>istanbul cover node_modules/mocha/bin/_mocha</code>。</p>
+<p>即可将 istanbul 和 mocha 结合使用，运行 <code>npm test</code> 终端会打印：</p>
+<div class="figure">
+<img src="./img/4.14.1.png" />
+
+</div>
+<p>打开 myblog/coverage/Icov-report/index.html，如下所示：</p>
+<div class="figure">
+<img src="./img/4.14.2.png" />
+
+</div>
+<p>可以点进去查看某个代码文件具体的覆盖率，如下所示：</p>
+<div class="figure">
+<img src="./img/4.14.3.png" />
+
+</div>
+<p>红色的行表示测试没有覆盖到，因为我们只写了 name 和 gender 的测试。</p>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.13%20%E6%97%A5%E5%BF%97.md">4.13 日志</a></p>
+<p>下一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.15%20%E9%83%A8%E7%BD%B2.md">4.15 部署</a></p>
+<h2 id="申请-mlab">4.15.1 申请 MLab</h2>
+<p><a href="https://mlab.com">MLab</a> (前身是 MongoLab) 是一个 mongodb 云数据库提供商，我们可以选择 500MB 空间的免费套餐用来测试。注册成功后，点击右上角的 <code>Create New</code> 创建一个数据库（如: myblog），成功后点击进入到该数据库详情页，注意页面中有一行黄色的警告：</p>
+<pre><code>A database user is required to connect to this database. To create one now, visit the &#39;Users&#39; tab and click the &#39;Add database user&#39; button.</code></pre>
+<p>每个数据库至少需要一个 user，所以我们点击 Users 下的 <code>Add database user</code> 创建一个用户。</p>
+<blockquote>
+<p>注意：不要选中 <code>Make read-only</code>，因为我们有写数据库的操作。</p>
+</blockquote>
+<p>最后分配给我们的类似下面的 mongodb url：</p>
+<pre><code>mongodb://&lt;dbuser&gt;:&lt;dbpassword&gt;@ds139327.mlab.com:39327/myblog</code></pre>
+<p>如我创建的用户名和密码都为 myblog 的用户，新建 config/production.js，添加如下代码：</p>
+<p><strong>config/production.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="dt">mongodb</span><span class="op">:</span> <span class="st">&#39;mongodb://myblog:myblog@ds139327.mlab.com:39327/myblog&#39;</span>
+<span class="op">}</span></code></pre></div>
+<p>停止程序，然后以 production 配置启动程序:</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="ot">NODE_ENV=</span>production <span class="kw">supervisor</span> index</code></pre></div>
+<blockquote>
+<p>注意：Windows 用户全局安装 <a href="https://www.npmjs.com/package/cross-env">cross-env</a>，使用：</p>
+<pre><code>npm i cross-env -g
+cross-env NODE_ENV=production supervisor index</code></pre>
+</blockquote>
+<h2 id="pm2">4.15.2 pm2</h2>
+<p>当我们的博客要部署到线上服务器时，不能单纯的靠 <code>node index</code> 或者 <code>supervisor index</code> 来启动了，因为我们断掉 SSH 连接后服务就终止了，这时我们就需要像 <a href="https://www.npmjs.com/package/pm2">pm2</a> 或者 <a href="https://www.npmjs.com/package/forever">forever</a> 这样的进程管理工具了。pm2 是 Node.js 下的生产环境进程管理工具，就是我们常说的进程守护工具，可以用来在生产环境中进行自动重启、日志记录、错误预警等等。以 pm2 为例，全局安装 pm2：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i pm2 -g</code></pre></div>
+<p>修改 package.json，添加 start 的命令：</p>
+<p><strong>package.json</strong></p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;scripts&quot;:</span> <span class="fu">{</span>
+  <span class="dt">&quot;test&quot;</span><span class="fu">:</span> <span class="st">&quot;istanbul cover _mocha&quot;</span><span class="fu">,</span>
+  <span class="dt">&quot;start&quot;</span><span class="fu">:</span> <span class="st">&quot;NODE_ENV=production pm2 start index.js --name &#39;myblog&#39;&quot;</span>
+<span class="fu">}</span></code></pre></div>
+<p>然后运行 <code>npm start</code> 通过 pm2 启动程序，如下图所示 ：</p>
+<div class="figure">
+<img src="./img/4.15.1.png" />
+
+</div>
+<p>pm2 常用命令:</p>
+<ol style="list-style-type: decimal">
+<li><code>pm2 start/stop</code>: 启动/停止程序</li>
+<li><code>pm2 reload/restart [id|name]</code>: 重启程序</li>
+<li><code>pm2 logs [id|name]</code>: 查看日志</li>
+<li><code>pm2 l/list</code>: 列出程序列表</li>
+</ol>
+<p>更多命令请使用 <code>pm2 -h</code> 查看。</p>
+<h2 id="部署到-heroku">4.15.2 部署到 Heroku</h2>
+<p><a href="https://www.heroku.com">Heroku</a> 是一个支持多种编程语言的云服务平台，Heroku 也提供免费的基础套餐供开发者测试使用。现在，我们将论坛部署到 Heroku。</p>
+<blockquote>
+<p>注意：新版 heroku 会有填写信用卡的步骤，如果没有信用卡请跳过本节。</p>
+</blockquote>
+<p>首先，需要到 <a href="https://toolbelt.heroku.com/" class="uri">https://toolbelt.heroku.com/</a> 下载安装 Heroku 的命令行工具包 toolbelt。然后登录（如果没有账号，请注册）到 Heroku 的 Dashboard，点击右上角 New -&gt; Create New App 创建一个应用。创建成功后运行：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">heroku</span> login</code></pre></div>
+<p>填写正确的 email 和 password 验证通过后，本地会产生一个 SSH public key。在部署到 Heroku 之前，我们需要对代码进行简单的修改。如下：</p>
+<p>1.删掉 .gitignore 中：</p>
+<pre><code>config/*
+!config/default.*</code></pre>
+<p>因为我们无法登录到 Heroku 主机创建 production 配置文件，所以这里将 production 配置也上传到 Heroku。</p>
+<p>2.打开 index.js，将 <code>app.listen</code> 修改为：</p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="kw">const</span> port <span class="op">=</span> <span class="va">process</span>.<span class="va">env</span>.<span class="at">PORT</span> <span class="op">||</span> <span class="va">config</span>.<span class="at">port</span>
+<span class="va">app</span>.<span class="at">listen</span>(port<span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+  <span class="va">console</span>.<span class="at">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="va">pkg</span>.<span class="at">name</span><span class="sc">}</span><span class="vs"> listening on port </span><span class="sc">${</span>port<span class="sc">}</span><span class="vs">`</span>)
+<span class="op">}</span>)</code></pre></div>
+<p>因为 Heroku 会动态分配端口（通过环境变量 PORT 指定），所以不能用配置文件里写死的端口。</p>
+<p>3.修改 package.json，在 scripts 添加：</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="er">&quot;heroku&quot;:</span> <span class="er">&quot;NODE_ENV=production</span> <span class="er">node</span> <span class="er">index&quot;</span></code></pre></div>
+<p>在根目录下新建 Procfile 文件，添加如下内容：</p>
+<pre><code>web: npm run heroku</code></pre>
+<p>Procfile 文件告诉 Heroku 该使用什么命令启动一个 web 服务。更多信息见：<a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="uri">https://devcenter.heroku.com/articles/getting-started-with-nodejs</a>。</p>
+<p>然后输入以下命令：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">git</span> init
+<span class="kw">heroku</span> git:remote -a 你的应用名称
+<span class="kw">git</span> add .
+<span class="kw">git</span> commit -am <span class="st">&quot;init&quot;</span>
+<span class="kw">git</span> push heroku master</code></pre></div>
+<p>稍后，我们的论坛就部署成功了。使用：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">heroku</span> open</code></pre></div>
+<p>打开应用主页。如果出现 &quot;Application error&quot;，使用：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">heroku</span> logs</code></pre></div>
+<p>查看日志，调试完后 commit 并 push 到 heroku重新部署。</p>
+<h2 id="部署到-ucloud">4.15.3 部署到 UCloud</h2>
+<h3 id="创建主机">创建主机</h3>
+<ol style="list-style-type: decimal">
+<li>注册 UCloud</li>
+<li>点击左侧的 <code>云主机</code>，然后点击 <code>创建主机</code>，统统选择最低配置</li>
+<li>右侧付费方式选择 <code>按时</code>（每小时），点击 <code>立即购买</code></li>
+<li>在支付确认页面，点击 <code>确认支付</code></li>
+</ol>
+<p>购买成功后回到主机管理列表，如下所示：</p>
+<div class="figure">
+<img src="./img/4.15.2.png" />
+
+</div>
+<blockquote>
+<p>注意：下面所有的 ip 都替换为你自己的外网 ip。</p>
+</blockquote>
+<h3 id="环境搭建与部署">环境搭建与部署</h3>
+<p>修改 config/production.js，将 port 修改为 80 端口：</p>
+<p><strong>config/production.js</strong></p>
+<div class="sourceCode"><pre class="sourceCode js"><code class="sourceCode javascript"><span class="va">module</span>.<span class="at">exports</span> <span class="op">=</span> <span class="op">{</span>
+  <span class="dt">port</span><span class="op">:</span> <span class="dv">80</span><span class="op">,</span>
+  <span class="dt">mongodb</span><span class="op">:</span> <span class="st">&#39;mongodb://myblog:myblog@ds139327.mlab.com:39327/myblog&#39;</span>
+<span class="op">}</span></code></pre></div>
+<p>登录主机，用刚才设置的密码：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">ssh</span> root@106.75.47.229</code></pre></div>
+<p>因为是 CentOS 系统，所以我选择使用 yum 安装，而不是下载源码编译安装：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">yum</span> install git <span class="co">#安装git</span>
+<span class="kw">yum</span> install nodejs <span class="co">#安装 Node.js</span>
+<span class="kw">yum</span> install npm <span class="co">#安装 npm</span>
+
+<span class="kw">npm</span> i npm -g <span class="co">#升级 npm</span>
+<span class="kw">npm</span> i pm2 -g <span class="co">#安装 pm2</span>
+<span class="kw">npm</span> i n -g <span class="co">#安装 n</span>
+<span class="kw">n</span> v8.9.1 <span class="co">#安装 v8.9.1 版本的 Node.js</span>
+<span class="kw">n</span> use 8.9.1 <span class="co">#使用 v8.9.1 版本的 Node.js</span>
+<span class="kw">node</span> -v</code></pre></div>
+<blockquote>
+<p>注意：如果 <code>node -v</code> 显示的不是 8.9.1，则断开 ssh，重新登录主机再试试。</p>
+</blockquote>
+<p>此时应该在 <code>/root</code> 目录下，运行以下命令：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">git</span> clone https://github.com/nswbmw/N-blog.git myblog <span class="co">#或在本机 myblog 目录下运行 rsync -av --exclude=&quot;node_modules&quot; ./ root@106.75.47.229:/root/myblog</span>
+<span class="kw">cd</span> myblog
+<span class="kw">npm</span> i
+<span class="kw">npm</span> start
+<span class="kw">pm2</span> logs</code></pre></div>
+<blockquote>
+<p>注意：如果不想用 git 的形式将代码拉到云主机上，可以用 rsync 将本地的代码同步到你的 UCloud 主机上，如上所示。</p>
+</blockquote>
+<p>最后，访问你的公网 ip 地址试试吧，如下所示：</p>
+<div class="figure">
+<img src="./img/4.15.3.png" />
+
+</div>
+<blockquote>
+<p>小提示：因为我们选择的按时付费套餐，测试完成后，可在主机管理页面选择关闭主机，节约费用。</p>
+</blockquote>
+<h2 id="部署到阿里云">4.15.4 部署到阿里云</h2>
+<h3 id="创建主机-1">创建主机</h3>
+<ol style="list-style-type: decimal">
+<li>注册/登录</li>
+<li>充值 100（因为我们选择『按量付费』，阿里云要求最低账户余额 &gt;= 100）</li>
+<li>进入『云服务器 ECS』</li>
+<li>点击『创建实例』</li>
+</ol>
+<p>进入创建实例页面，按下图选择配置：</p>
+<div class="figure">
+<img src="./img/4.15.4.png" />
+
+</div>
+<p>需要注意几点：</p>
+<ol style="list-style-type: decimal">
+<li>计费方式：按量付费</li>
+<li>公网 ip 地址：分配</li>
+<li>安全组：选中开启 80 端口</li>
+<li>镜像：Ubuntu 16.04 64位</li>
+</ol>
+<p>点击『开通进入下一页』，选中：</p>
+<div class="figure">
+<img src="./img/4.15.5.png" />
+
+</div>
+<blockquote>
+<p>注意：这里我们只是演示，所以自动释放时间只设置了几个小时</p>
+</blockquote>
+<p>点击『去开通』创建成功，然后点击提示中的『管理控制台』进入 ECS 管理页，刚才创建的机器需要等待几分钟才会初始化成功。成功后如下所示：</p>
+<div class="figure">
+<img src="./img/4.15.6.png" />
+
+</div>
+<h3 id="环境搭建">环境搭建</h3>
+<p>复制创建的机器的公网 ip 地址，运行：</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">ssh</span> root@39.106.134.66</code></pre></div>
+<p>输入刚才设置的密码登录远程主机。</p>
+<h4 id="安装-node.js-1">安装 Node.js</h4>
+<p>我们下载编译好的 Node.js 压缩包，解压然后使用软连接。</p>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">wget</span> https://nodejs.org/dist/v8.9.1/node-v8.9.1-linux-x64.tar.xz
+<span class="kw">tar</span> -xvf node-v8.9.1-linux-x64.tar.xz
+<span class="kw">mv</span> node-v8.9.1-linux-x64 nodejs
+<span class="kw">ln</span> -s ~/nodejs/bin/* /usr/local/bin/
+<span class="kw">node</span> -v
+<span class="kw">npm</span> -v</code></pre></div>
+<h4 id="安装-mongodb">安装 MongoDB</h4>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">wget</span> https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-3.4.10.tgz
+<span class="kw">tar</span> -xvf mongodb-linux-x86_64-ubuntu1604-3.4.10.tgz
+<span class="kw">mv</span> mongodb-linux-x86_64-ubuntu1604-3.4.10 mongodb
+<span class="kw">ln</span> -s ~/mongodb/bin/* /usr/local/bin/
+<span class="kw">mongod</span> --version
+<span class="kw">mongo</span> --version
+<span class="kw">mkdir</span> mongodb/data
+<span class="kw">mongod</span> --dbpath=mongodb/data <span class="kw">&amp;</span></code></pre></div>
+<h4 id="安装-git">安装 Git</h4>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">apt-get</span> update
+<span class="kw">apt-get</span> install git
+<span class="kw">git</span> clone https://github.com/nswbmw/N-blog.git <span class="co">#或者你的 GitHub blog 地址</span>
+<span class="kw">cd</span> N-blog
+<span class="kw">npm</span> i
+<span class="kw">vim</span> config/default.js <span class="co">#修改端口 3000-&gt;80</span>
+<span class="kw">node</span> index</code></pre></div>
+<p>此时，浏览器中访问你的机器的公网 ip 试试吧。</p>
+<h4 id="使用-pm2-启动">使用 PM2 启动</h4>
+<div class="sourceCode"><pre class="sourceCode sh"><code class="sourceCode bash"><span class="kw">npm</span> i pm2 -g
+<span class="kw">ln</span> -s ~/nodejs/bin/* /usr/local/bin/
+<span class="kw">pm2</span> start index.js --name=<span class="st">&quot;myblog&quot;</span></code></pre></div>
+<p>这里我们使用 pm2 启动博客，所以关掉终端后博客仍然在运行。</p>
+<p>上一节：<a href="https://github.com/nswbmw/N-blog/blob/master/book/4.14%20%E6%B5%8B%E8%AF%95.md">4.14 测试</a></p>
